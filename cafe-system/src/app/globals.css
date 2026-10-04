@@ -1,0 +1,138 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Custom Coffee Palette from User */
+  --color-coffee-900: #3E1E04;
+  --color-coffee-700: #6A3005;
+  --color-coffee-500: #965015;
+  --color-coffee-300: #C4923E;
+  --color-coffee-100: #CBAC85;
+  --color-coffee-50: #F6F1EA;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #FFFDFB;
+  --foreground: #3E1E04;
+  --card: #FFFFFF;
+  --card-foreground: #3E1E04;
+  --popover: #FFFFFF;
+  --popover-foreground: #3E1E04;
+  --primary: #965015;
+  --primary-foreground: #FFFFFF;
+  --secondary: #CBAC85;
+  --secondary-foreground: #3E1E04;
+  --muted: #F6F1EA;
+  --muted-foreground: #6A3005;
+  --accent: #CBAC85;
+  --accent-foreground: #3E1E04;
+  --destructive: #ef4444;
+  --border: #CBAC85;
+  --input: #CBAC85;
+  --ring: #965015;
+  --chart-1: #3E1E04;
+  --chart-2: #6A3005;
+  --chart-3: #965015;
+  --chart-4: #C4923E;
+  --chart-5: #CBAC85;
+  --radius: 0.75rem;
+  --sidebar: #FFFDFB;
+  --sidebar-foreground: #3E1E04;
+  --sidebar-primary: #965015;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #CBAC85;
+  --sidebar-accent-foreground: #3E1E04;
+  --sidebar-border: #CBAC85;
+  --sidebar-ring: #965015;
+}
+
+.dark {
+  --background: #251001;
+  --foreground: #CBAC85;
+  --card: #3E1E04;
+  --card-foreground: #CBAC85;
+  --popover: #3E1E04;
+  --popover-foreground: #CBAC85;
+  --primary: #C4923E;
+  --primary-foreground: #3E1E04;
+  --secondary: #6A3005;
+  --secondary-foreground: #CBAC85;
+  --muted: #3E1E04;
+  --muted-foreground: #CBAC85;
+  --accent: #6A3005;
+  --accent-foreground: #CBAC85;
+  --destructive: #7f1d1d;
+  --border: #6A3005;
+  --input: #6A3005;
+  --ring: #C4923E;
+  --chart-1: #C4923E;
+  --chart-2: #CBAC85;
+  --chart-3: #965015;
+  --chart-4: #6A3005;
+  --chart-5: #3E1E04;
+  --sidebar: #3E1E04;
+  --sidebar-foreground: #CBAC85;
+  --sidebar-primary: #C4923E;
+  --sidebar-primary-foreground: #3E1E04;
+  --sidebar-accent: #6A3005;
+  --sidebar-accent-foreground: #CBAC85;
+  --sidebar-border: #6A3005;
+  --sidebar-ring: #C4923E;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

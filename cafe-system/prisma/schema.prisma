@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// 1. USER & ACCESS CONTROL SYSTEM
+// ==========================================
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // e.g., "Guest", "Member", "Cashier", "Artist", "Manager", "Owner", "IT"
+  description String?
+  users       User[]
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  roleId        Int
+  phone         String?  @unique
+  email         String?  @unique
+  passwordHash  String?
+  fullName      String
+  createdAt     DateTime @default(now())
+
+  role          Role     @relation(fields: [roleId], references: [id])
+  staffProfile  StaffProfile?
+  
+  bookingsMade     Booking[] @relation("CustomerBookings")
+  bookingsAssigned Booking[] @relation("StaffBookings")
+}
+
+model StaffProfile {
+  id           Int     @id @default(autoincrement())
+  userId       Int     @unique
+  bio          String?
+  portfolioUrl String?
+
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==========================================
+// 2. ONLINE BOOKING SYSTEM (STUDIO)
+// ==========================================
+
+model Service {
+  id          Int       @id @default(autoincrement())
+  name        String    // e.g., "Photography", "Makeup"
+  price       Float
+  bookings    Booking[]
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  staffId     Int
+  serviceId   Int
+  bookingDate DateTime
+  timeSlot    String   // e.g., "10:00-12:00"
+  status      String   @default("Pending") // Pending, Paid, Completed, Cancelled
+  totalPrice  Float
+
+  customer    User     @relation("CustomerBookings", fields: [customerId], references: [id])
+  staff       User     @relation("StaffBookings", fields: [staffId], references: [id])
+  service     Service  @relation(fields: [serviceId], references: [id])
+}
+
+// ==========================================
+// 3. IN-STORE ORDERING SYSTEM (CAFE)
+// ==========================================
+
+model TableCafe {
+  id             Int       @id @default(autoincrement())
+  tableNumber    String    @unique // e.g., "T01", "T02"
+  currentSession String?   // Dynamic QR session token (null if table is empty)
+  orders         Order[]
+}
+
+model MenuCategory {
+  id        Int        @id @default(autoincrement())
+  name      String     // e.g., "Drink", "Dessert", "Food"
+  menuItems MenuItem[]
+}
+
+model MenuItem {
+  id          Int         @id @default(autoincrement())
+  categoryId  Int
+  name        String
+  price       Float
+  isAvailable Boolean     @default(true)
+
+  category    MenuCategory @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  tableId     Int
+  status      String      @default("Dining") // Dining, Billing, Paid
+  totalAmount Float       @default(0)
+
+  table       TableCafe   @relation(fields: [tableId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int      @default(1)
+  kdsStatus  String   @default("Pending") // Pending, Cooking, Served
+
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+// ==========================================
+// 4. PAYMENT & FINANCE SYSTEM
+// ==========================================
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  referenceId   Int      // Stores either Booking.id OR Order.id
+  referenceType String   // "BOOKING" or "ORDER"
+  amount        Float
+  status        String   @default("Success")
+  paidAt        DateTime @default(now())
+}
