@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -41,26 +42,7 @@ export default function BookingPage() {
     <main className="min-h-screen bg-coffee-50 pb-12 font-sans">
       
       {/* Sticky Navigation Menu */}
-      <nav className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-coffee-100 shadow-sm transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/">
-              <span className="text-2xl font-extrabold text-coffee-900 tracking-tight cursor-pointer">Cafe<span className="text-coffee-300">&</span>Studio</span>
-            </Link>
-          </div>
-          <div className="hidden md:flex gap-8 text-sm font-semibold text-coffee-700">
-            <Link href="/" className="hover:text-coffee-900 transition-colors">หน้าแรก</Link>
-            <a href="#" className="hover:text-coffee-900 transition-colors">ทีมช่างภาพ</a>
-            <a href="#" className="hover:text-coffee-900 transition-colors">เมนูคาเฟ่</a>
-            <a href="#" className="hover:text-coffee-900 transition-colors">ติดต่อเรา</a>
-          </div>
-          <Link href="/login">
-            <Button variant="outline" className="border-coffee-500 text-coffee-900 hover:bg-coffee-100 rounded-full px-6">
-              เข้าสู่ระบบ
-            </Button>
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Breadcrumb / Back Button */}
       <div className="max-w-6xl mx-auto px-4 mt-8 mb-4">

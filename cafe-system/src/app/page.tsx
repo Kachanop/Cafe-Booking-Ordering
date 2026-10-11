@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
-import { Coffee, Sparkles, CakeSlice, QrCode, CheckCircle2, ArrowDown } from "lucide-react";
+import { Coffee, Sparkles, CakeSlice, QrCode, CheckCircle2, ArrowDown, MapPin, Clock, Phone, Mail } from "lucide-react";
 
 export const revalidate = 0; // ดึงข้อมูลสดใหม่จาก Supabase เสมอ
 
@@ -77,40 +78,8 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-coffee-50 font-sans scroll-smooth">
-      {/* 1. Sticky Navigation Menu */}
-      <nav className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-coffee-100 shadow-sm transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/">
-              <span className="text-2xl font-extrabold text-coffee-900 tracking-tight cursor-pointer">
-                Cafe<span className="text-coffee-300">&</span>Studio
-              </span>
-            </Link>
-          </div>
-          <div className="hidden md:flex gap-8 text-sm font-semibold text-coffee-700">
-            <Link href="/" className="hover:text-coffee-900 transition-colors">
-              หน้าแรก
-            </Link>
-            <Link href="/booking" className="hover:text-coffee-900 transition-colors">
-              ทีมช่างภาพ
-            </Link>
-            <a href="#cafe-menu" className="hover:text-coffee-900 transition-colors">
-              เมนูคาเฟ่
-            </a>
-            <a href="#cafe-menu" className="hover:text-coffee-900 transition-colors">
-              สั่งอาหารผ่าน QR
-            </a>
-          </div>
-          <Link href="/login">
-            <Button
-              variant="outline"
-              className="border-coffee-500 text-coffee-900 hover:bg-coffee-100 rounded-full px-6"
-            >
-              เข้าสู่ระบบ
-            </Button>
-          </Link>
-        </div>
-      </nav>
+      {/* 1. Sticky Navigation Menu พร้อมรูป Icons */}
+      <Navbar />
 
       {/* 2. Hero Section */}
       <section className="relative h-[calc(100vh-64px)] min-h-[600px] flex flex-col items-center justify-center">
@@ -195,7 +164,7 @@ export default async function Home() {
           </p>
         </div>
 
-        {/* Categories & Items Grid */}
+        {/* Categories & Items Grid: สัดส่วน รูปภาพ 65% : ข้อความ 35% */}
         <div className="space-y-16">
           {categories.map((category) => (
             <div key={category.id} className="space-y-6">
@@ -214,14 +183,14 @@ export default async function Home() {
                 </div>
               </div>
 
-              {/* Items Cards: อัตราส่วน รูปภาพ 65% : ข้อความและรายละเอียด 35% */}
+              {/* Items Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {category.menuItems?.map((item: any) => (
                   <div
                     key={item.id}
                     className="group bg-white rounded-3xl overflow-hidden border border-coffee-100 shadow-sm hover:shadow-xl hover:border-coffee-300 transition-all duration-300 flex flex-col h-[430px]"
                   >
-                    {/* ส่วนรูปภาพ 65% (รูปใหญ่ คมชัด โดดเด่น) */}
+                    {/* ส่วนรูปภาพ 65% */}
                     <div className="relative h-[65%] w-full overflow-hidden bg-coffee-100/30">
                       <Image
                         src={getMenuItemImage(item.name)}
@@ -230,7 +199,6 @@ export default async function Home() {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
-                      {/* ป้ายสถานะลอยบนมุมรูปภาพ */}
                       <div className="absolute top-3 right-3 z-10">
                         <Badge
                           variant="secondary"
@@ -245,7 +213,7 @@ export default async function Home() {
                       </div>
                     </div>
 
-                    {/* ส่วนข้อความและรายละเอียด 35% (ชื่อเมนู + ราคาใหญ่ชัดเจนตามแบบตัวอย่าง) */}
+                    {/* ส่วนข้อความและรายละเอียด 35% */}
                     <div className="h-[35%] p-5 flex flex-col justify-between bg-white border-t border-coffee-50">
                       <div>
                         <h5 className="text-lg md:text-xl font-bold text-coffee-900 group-hover:text-coffee-700 transition-colors line-clamp-1">
@@ -281,6 +249,59 @@ export default async function Home() {
           ))}
         </div>
       </section>
+
+      {/* 5. About Us Section (เกี่ยวกับเรา) */}
+      <section id="about" className="bg-white border-t border-coffee-100 py-20 scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-block bg-coffee-100 text-coffee-900 font-bold text-xs px-3.5 py-1.5 rounded-full mb-4">
+                ABOUT OUR CAFE & STUDIO
+              </div>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-coffee-900 leading-tight mb-6">
+                พื้นที่สร้างสรรค์ที่ผสาน<br />
+                <span className="text-coffee-500">รสชาติกาแฟ</span> เข้ากับ <span className="text-coffee-500">ศิลปะภาพถ่าย</span>
+              </h3>
+              <p className="text-coffee-700 leading-relaxed mb-6 font-normal">
+                เราตั้งใจสร้างสรรค์พื้นที่แห่งความสุขที่ลูกค้าสามารถเพลิดเพลินกับกาแฟพรีเมียม ขนมอบสดใหม่ 
+                พร้อมบริการสตูดิโอถ่ายภาพและช่างแต่งหน้ามืออาชีพครบวงจรในที่เดียว ให้ทุกช่วงเวลาของคุณถูกบันทึกไว้อย่างงดงาม
+              </p>
+              <div className="space-y-3 text-sm font-medium text-coffee-900">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-coffee-500 shrink-0" />
+                  <span>123 ถนนสุขุมวิท ซอยคาเฟ่ กรุงเทพฯ 10110</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-coffee-500 shrink-0" />
+                  <span>เปิดบริการทุกวัน 09:00 - 19:00 น.</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-coffee-500 shrink-0" />
+                  <span>02-123-4567, 089-123-4567</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-coffee-500 shrink-0" />
+                  <span>contact@cafeandstudio.com</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative h-[380px] rounded-3xl overflow-hidden shadow-xl border border-coffee-100">
+              <Image
+                src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80"
+                alt="Cafe Interior"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-coffee-900 text-coffee-100 py-8 text-center text-xs border-t border-coffee-700">
+        <p>© 2026 Cafe & Studio Booking & Ordering System. All rights reserved.</p>
+      </footer>
     </main>
   );
 }
