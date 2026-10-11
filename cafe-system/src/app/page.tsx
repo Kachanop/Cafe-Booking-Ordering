@@ -2,11 +2,46 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 import { Coffee, Sparkles, CakeSlice, QrCode, CheckCircle2, ArrowDown } from "lucide-react";
 
 export const revalidate = 0; // ดึงข้อมูลสดใหม่จาก Supabase เสมอ
+
+// ฟังก์ชันแมปรูปภาพความละเอียดสูงสำหรับแต่ละเมนูคาเฟ่
+const getMenuItemImage = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes("espresso")) {
+    return "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("americano")) {
+    return "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("caramel")) {
+    return "https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("dirty")) {
+    return "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("latte") && !n.includes("matcha")) {
+    return "https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("matcha")) {
+    return "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("thai")) {
+    return "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("yuzu") || n.includes("soda")) {
+    return "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("croissant")) {
+    return "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80";
+  }
+  if (n.includes("cheesecake") || n.includes("cake")) {
+    return "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80";
+  }
+  return "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80";
+};
 
 export default async function Home() {
   // ดึงหมวดหมู่และรายการเมนูทั้งหมดจากฐานข้อมูล Supabase
@@ -115,9 +150,9 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 4. Cafe Menu Showcase Section (โชว์เมนูที่ดึงตรงจาก Supabase) */}
+      {/* 4. Cafe Menu Showcase Section */}
       <section id="cafe-menu" className="max-w-6xl mx-auto px-4 mt-20 mb-24 scroll-mt-20">
-        {/* Banner กล่องสีน้ำตาลเดิม - ปรับให้พรีเมียมและเกริ่นนำเมนู */}
+        {/* Banner สั่งอาหารผ่านโต๊ะ */}
         <div className="bg-coffee-900 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden border border-coffee-700 mb-14">
           <div className="absolute -left-12 -bottom-12 w-48 h-48 bg-coffee-700 rounded-full blur-3xl opacity-50"></div>
           <div className="absolute -right-12 -top-12 w-48 h-48 bg-coffee-500 rounded-full blur-3xl opacity-40"></div>
@@ -161,7 +196,7 @@ export default async function Home() {
         </div>
 
         {/* Categories & Items Grid */}
-        <div className="space-y-14">
+        <div className="space-y-16">
           {categories.map((category) => (
             <div key={category.id} className="space-y-6">
               {/* Category Title */}
@@ -179,48 +214,67 @@ export default async function Home() {
                 </div>
               </div>
 
-              {/* Items Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Items Cards: อัตราส่วน รูปภาพ 65% : ข้อความและรายละเอียด 35% */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {category.menuItems?.map((item: any) => (
-                  <Card
+                  <div
                     key={item.id}
-                    className="group border border-coffee-100 bg-white hover:border-coffee-300 hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden flex flex-col justify-between"
+                    className="group bg-white rounded-3xl overflow-hidden border border-coffee-100 shadow-sm hover:shadow-xl hover:border-coffee-300 transition-all duration-300 flex flex-col h-[430px]"
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <div className="flex-1">
-                          <h5 className="text-lg font-bold text-coffee-900 group-hover:text-coffee-700 transition-colors">
-                            {item.name}
-                          </h5>
-                        </div>
+                    {/* ส่วนรูปภาพ 65% (รูปใหญ่ คมชัด โดดเด่น) */}
+                    <div className="relative h-[65%] w-full overflow-hidden bg-coffee-100/30">
+                      <Image
+                        src={getMenuItemImage(item.name)}
+                        alt={item.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      />
+                      {/* ป้ายสถานะลอยบนมุมรูปภาพ */}
+                      <div className="absolute top-3 right-3 z-10">
                         <Badge
                           variant="secondary"
-                          className={`shrink-0 text-xs font-semibold px-2.5 py-1 ${
+                          className={`backdrop-blur-md shadow-sm font-semibold text-xs px-3 py-1 rounded-full ${
                             item.isAvailable
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-red-50 text-red-600 border border-red-200"
+                              ? "bg-white/90 text-emerald-700 border border-emerald-200"
+                              : "bg-black/60 text-white border-none"
                           }`}
                         >
                           {item.isAvailable ? "พร้อมเสิร์ฟ" : "สินค้าหมด"}
                         </Badge>
                       </div>
+                    </div>
 
-                      <div className="flex items-baseline justify-between mt-6 pt-4 border-t border-coffee-50">
-                        <div>
-                          <span className="text-xs text-coffee-500 block font-medium">ราคา</span>
-                          <span className="text-2xl font-extrabold text-coffee-900">
-                            ฿{item.price.toLocaleString()}
+                    {/* ส่วนข้อความและรายละเอียด 35% (ชื่อเมนู + ราคาใหญ่ชัดเจนตามแบบตัวอย่าง) */}
+                    <div className="h-[35%] p-5 flex flex-col justify-between bg-white border-t border-coffee-50">
+                      <div>
+                        <h5 className="text-lg md:text-xl font-bold text-coffee-900 group-hover:text-coffee-700 transition-colors line-clamp-1">
+                          {item.name}
+                        </h5>
+                        <p className="text-xs text-coffee-500 font-medium mt-1">
+                          {category.name}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-2xl md:text-3xl font-black text-coffee-900 tracking-tight">
+                            {item.price}
+                          </span>
+                          <span className="text-base font-bold text-coffee-700">
+                            บาท
                           </span>
                         </div>
+
                         <Button
                           size="sm"
-                          className="bg-coffee-700 hover:bg-coffee-900 text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-sm transition-transform active:scale-95 cursor-pointer"
+                          className="bg-coffee-700 hover:bg-coffee-900 text-white rounded-full px-5 py-2 text-sm font-bold shadow-md transition-all active:scale-95 cursor-pointer"
                         >
-                          + สั่งเมนูนี้
+                          + สั่ง
                         </Button>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
