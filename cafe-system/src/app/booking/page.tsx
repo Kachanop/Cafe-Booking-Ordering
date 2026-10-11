@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -131,6 +132,11 @@ export default function BookingPage() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <div className="mt-20">
+        <Footer />
+      </div>
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
@@ -250,58 +251,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 5. About Us Section (เกี่ยวกับเรา) */}
-      <section id="about" className="bg-white border-t border-coffee-100 py-20 scroll-mt-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block bg-coffee-100 text-coffee-900 font-bold text-xs px-3.5 py-1.5 rounded-full mb-4">
-                ABOUT OUR CAFE & STUDIO
-              </div>
-              <h3 className="text-3xl md:text-4xl font-extrabold text-coffee-900 leading-tight mb-6">
-                พื้นที่สร้างสรรค์ที่ผสาน<br />
-                <span className="text-coffee-500">รสชาติกาแฟ</span> เข้ากับ <span className="text-coffee-500">ศิลปะภาพถ่าย</span>
-              </h3>
-              <p className="text-coffee-700 leading-relaxed mb-6 font-normal">
-                เราตั้งใจสร้างสรรค์พื้นที่แห่งความสุขที่ลูกค้าสามารถเพลิดเพลินกับกาแฟพรีเมียม ขนมอบสดใหม่ 
-                พร้อมบริการสตูดิโอถ่ายภาพและช่างแต่งหน้ามืออาชีพครบวงจรในที่เดียว ให้ทุกช่วงเวลาของคุณถูกบันทึกไว้อย่างงดงาม
-              </p>
-              <div className="space-y-3 text-sm font-medium text-coffee-900">
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-coffee-500 shrink-0" />
-                  <span>123 ถนนสุขุมวิท ซอยคาเฟ่ กรุงเทพฯ 10110</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-coffee-500 shrink-0" />
-                  <span>เปิดบริการทุกวัน 09:00 - 19:00 น.</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-coffee-500 shrink-0" />
-                  <span>02-123-4567, 089-123-4567</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-coffee-500 shrink-0" />
-                  <span>contact@cafeandstudio.com</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative h-[380px] rounded-3xl overflow-hidden shadow-xl border border-coffee-100">
-              <Image
-                src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80"
-                alt="Cafe Interior"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-coffee-900 text-coffee-100 py-8 text-center text-xs border-t border-coffee-700">
-        <p>© 2026 Cafe & Studio Booking & Ordering System. All rights reserved.</p>
-      </footer>
+      {/* 5. Footer (เกี่ยวกับเรา / ข้อมูลร้าน / เมนูลัด) */}
+      <Footer />
     </main>
   );
 }
