@@ -54,9 +54,11 @@ export default function BookingPage() {
             <a href="#" className="hover:text-coffee-900 transition-colors">เมนูคาเฟ่</a>
             <a href="#" className="hover:text-coffee-900 transition-colors">ติดต่อเรา</a>
           </div>
-          <Button variant="outline" className="border-coffee-500 text-coffee-900 hover:bg-coffee-100 rounded-full px-6">
-            เข้าสู่ระบบ
-          </Button>
+          <Link href="/login">
+            <Button variant="outline" className="border-coffee-500 text-coffee-900 hover:bg-coffee-100 rounded-full px-6">
+              เข้าสู่ระบบ
+            </Button>
+          </Link>
         </div>
       </nav>
 
