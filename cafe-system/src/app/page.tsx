@@ -122,31 +122,31 @@ export default async function Home() {
 
       {/* 4. Cafe Menu Showcase Section */}
       <section id="cafe-menu" className="max-w-6xl mx-auto px-4 mt-20 mb-24 scroll-mt-20">
-        {/* Banner สั่งอาหารผ่านโต๊ะ */}
+        {/* Banner ข้อมูลเมนูคาเฟ่ */}
         <div className="bg-coffee-900 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden border border-coffee-700 mb-14">
           <div className="absolute -left-12 -bottom-12 w-48 h-48 bg-coffee-700 rounded-full blur-3xl opacity-50"></div>
           <div className="absolute -right-12 -top-12 w-48 h-48 bg-coffee-500 rounded-full blur-3xl opacity-40"></div>
 
           <div className="relative z-10 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-coffee-700/80 text-coffee-100 text-sm font-medium px-4 py-1.5 rounded-full mb-4 border border-coffee-500/50">
-              <QrCode className="w-4 h-4 text-coffee-300" />
-              <span>In-Store Table Ordering System</span>
+              <Coffee className="w-4 h-4 text-coffee-300" />
+              <span>Signature Coffee & Fresh Bakery</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-coffee-50 mb-4 tracking-tight">
-              หิวไหม? สั่งอาหารจากโต๊ะของคุณได้เลย
+              เมนูคาเฟ่ & เครื่องดื่มสูตรพิเศษ
             </h2>
             <p className="text-coffee-100 mb-6 text-lg md:text-xl font-light leading-relaxed">
-              สำหรับลูกค้าที่นั่งอยู่ในคาเฟ่ สามารถสแกน <span className="font-semibold text-white">QR Code ที่โต๊ะ</span> เพื่อสั่งอาหารได้ทันที รายการจะถูกส่งตรงไปยังห้องครัวแบบเรียลไทม์
+              คัดสรรเมล็ดกาแฟชั้นเลิศและวัตถุดิบนำเข้าพรีเมียม อบสดใหม่และชงสดใหม่ทุกวัน เพื่อรสชาติที่ดีที่สุดสำหรับคุณ
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-coffee-100/90 font-medium">
               <span className="flex items-center gap-1.5 bg-black/20 px-4 py-2 rounded-xl">
-                <CheckCircle2 className="w-4 h-4 text-green-400" /> สดใหม่ทุกออเดอร์
+                <CheckCircle2 className="w-4 h-4 text-green-400" /> สดใหม่ทุกแก้ว
               </span>
               <span className="flex items-center gap-1.5 bg-black/20 px-4 py-2 rounded-xl">
-                <CheckCircle2 className="w-4 h-4 text-green-400" /> ไม่ต้องรอเรียกพนักงาน
+                <CheckCircle2 className="w-4 h-4 text-green-400" /> วัตถุดิบนำเข้าพรีเมียม
               </span>
               <span className="flex items-center gap-1.5 bg-black/20 px-4 py-2 rounded-xl">
-                <CheckCircle2 className="w-4 h-4 text-green-400" /> ชำระเงินสะดวกที่โต๊ะ
+                <CheckCircle2 className="w-4 h-4 text-green-400" /> บรรยากาศผ่อนคลาย
               </span>
             </div>
           </div>
@@ -234,13 +234,6 @@ export default async function Home() {
                             บาท
                           </span>
                         </div>
-
-                        <Button
-                          size="sm"
-                          className="bg-coffee-700 hover:bg-coffee-900 text-white rounded-full px-5 py-2 text-sm font-bold shadow-md transition-all active:scale-95 cursor-pointer"
-                        >
-                          + สั่ง
-                        </Button>
                       </div>
                     </div>
                   </div>

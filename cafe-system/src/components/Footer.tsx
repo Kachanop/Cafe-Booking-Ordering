@@ -54,7 +54,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/#cafe-menu" className="hover:text-white transition-colors">
-                  เมนูคาเฟ่ & สั่งผ่าน QR
+                  เมนูอาหาร & เครื่องดื่ม
                 </Link>
               </li>
               <li>
