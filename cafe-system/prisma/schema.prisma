@@ -20,6 +20,7 @@ model Role {
 
 model User {
   id            Int      @id @default(autoincrement())
+  authUserId    String?  @unique @map("auth_user_id") @db.Uuid
   roleId        Int
   phone         String?  @unique
   email         String?  @unique
@@ -39,6 +40,8 @@ model StaffProfile {
   userId       Int     @unique
   bio          String?
   portfolioUrl String?
+  avatarUrl    String? @map("avatar_url")
+  specialties  String[] @default([])
 
   user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -63,6 +66,8 @@ model Booking {
   timeSlot    String   // e.g., "10:00-12:00"
   status      String   @default("Pending") // Pending, Paid, Completed, Cancelled
   totalPrice  Float
+  customerNote String? @map("customer_note")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   customer    User     @relation("CustomerBookings", fields: [customerId], references: [id])
   staff       User     @relation("StaffBookings", fields: [staffId], references: [id])
@@ -77,6 +82,8 @@ model TableCafe {
   id             Int       @id @default(autoincrement())
   tableNumber    String    @unique // e.g., "T01", "T02"
   currentSession String?   // Dynamic QR session token (null if table is empty)
+  billRequestedAt DateTime? @map("bill_requested_at") @db.Timestamptz(6)
+  openedAt        DateTime? @map("opened_at") @db.Timestamptz(6)
   orders         Order[]
 }
 
@@ -102,6 +109,7 @@ model Order {
   tableId     Int
   status      String      @default("Dining") // Dining, Billing, Paid
   totalAmount Float       @default(0)
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
 
   table       TableCafe   @relation(fields: [tableId], references: [id])
   orderItems  OrderItem[]
@@ -113,6 +121,7 @@ model OrderItem {
   menuItemId Int
   quantity   Int      @default(1)
   kdsStatus  String   @default("Pending") // Pending, Cooking, Served
+  note       String?
 
   order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
@@ -128,5 +137,6 @@ model Payment {
   referenceType String   // "BOOKING" or "ORDER"
   amount        Float
   status        String   @default("Success")
+  method        String   @default("UNKNOWN")
   paidAt        DateTime @default(now())
 }

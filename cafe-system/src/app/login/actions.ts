@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { ensureMemberProfile, normalizeRole } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -20,7 +22,13 @@ export async function login(formData: FormData) {
   }
 
   // ดึง Role จาก metadata ของ Supabase ที่บันทึกไว้ตอนสมัคร
-  const role = data?.user?.user_metadata?.role || 'member'
+  if (data.user) await ensureMemberProfile(data.user)
+  const role = data.user
+    ? normalizeRole((await prisma.user.findUnique({
+        where: { authUserId: data.user.id },
+        include: { role: true },
+      }))?.role.name ?? 'Member')
+    : 'member'
 
   revalidatePath('/', 'layout')
 
@@ -35,33 +43,16 @@ export async function login(formData: FormData) {
       redirect('/cashier') // ไปหน้าจอแคชเชียร์
     case 'artist':
       redirect('/artist-dashboard') // ไปหน้าดูคิวงานช่าง
+    case 'waiter':
+      redirect('/cashier')
+    case 'it staff':
+      redirect('/it')
     default:
       redirect('/') // ลูกค้าทั่วไป (Member) ไปหน้าแรก
   }
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient()
-
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const role = formData.get('role') as string || 'member'
-
-  // บันทึก Role ลงใน Supabase Auth โดยใช้ user_metadata
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        role: role,
-      }
-    }
-  })
-
-  if (error) {
-    redirect('/login?error=' + encodeURIComponent(error.message))
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/login?message=' + encodeURIComponent('ลงทะเบียนสำเร็จ! กรุณาล็อกอินด้วยบัญชีที่คุณเพิ่งสร้าง'))
+  const { registerMember } = await import('@/app/actions')
+  return registerMember(formData)
 }

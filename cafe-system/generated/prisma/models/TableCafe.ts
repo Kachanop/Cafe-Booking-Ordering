@@ -38,18 +38,24 @@ export type TableCafeMinAggregateOutputType = {
   id: number | null
   tableNumber: string | null
   currentSession: string | null
+  billRequestedAt: Date | null
+  openedAt: Date | null
 }
 
 export type TableCafeMaxAggregateOutputType = {
   id: number | null
   tableNumber: string | null
   currentSession: string | null
+  billRequestedAt: Date | null
+  openedAt: Date | null
 }
 
 export type TableCafeCountAggregateOutputType = {
   id: number
   tableNumber: number
   currentSession: number
+  billRequestedAt: number
+  openedAt: number
   _all: number
 }
 
@@ -66,18 +72,24 @@ export type TableCafeMinAggregateInputType = {
   id?: true
   tableNumber?: true
   currentSession?: true
+  billRequestedAt?: true
+  openedAt?: true
 }
 
 export type TableCafeMaxAggregateInputType = {
   id?: true
   tableNumber?: true
   currentSession?: true
+  billRequestedAt?: true
+  openedAt?: true
 }
 
 export type TableCafeCountAggregateInputType = {
   id?: true
   tableNumber?: true
   currentSession?: true
+  billRequestedAt?: true
+  openedAt?: true
   _all?: true
 }
 
@@ -171,6 +183,8 @@ export type TableCafeGroupByOutputType = {
   id: number
   tableNumber: string
   currentSession: string | null
+  billRequestedAt: Date | null
+  openedAt: Date | null
   _count: TableCafeCountAggregateOutputType | null
   _avg: TableCafeAvgAggregateOutputType | null
   _sum: TableCafeSumAggregateOutputType | null
@@ -200,6 +214,8 @@ export type TableCafeWhereInput = {
   id?: Prisma.IntFilter<"TableCafe"> | number
   tableNumber?: Prisma.StringFilter<"TableCafe"> | string
   currentSession?: Prisma.StringNullableFilter<"TableCafe"> | string | null
+  billRequestedAt?: Prisma.DateTimeNullableFilter<"TableCafe"> | Date | string | null
+  openedAt?: Prisma.DateTimeNullableFilter<"TableCafe"> | Date | string | null
   orders?: Prisma.OrderListRelationFilter
 }
 
@@ -207,6 +223,8 @@ export type TableCafeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   currentSession?: Prisma.SortOrderInput | Prisma.SortOrder
+  billRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  openedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
@@ -217,6 +235,8 @@ export type TableCafeWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TableCafeWhereInput[]
   NOT?: Prisma.TableCafeWhereInput | Prisma.TableCafeWhereInput[]
   currentSession?: Prisma.StringNullableFilter<"TableCafe"> | string | null
+  billRequestedAt?: Prisma.DateTimeNullableFilter<"TableCafe"> | Date | string | null
+  openedAt?: Prisma.DateTimeNullableFilter<"TableCafe"> | Date | string | null
   orders?: Prisma.OrderListRelationFilter
 }, "id" | "tableNumber">
 
@@ -224,6 +244,8 @@ export type TableCafeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   currentSession?: Prisma.SortOrderInput | Prisma.SortOrder
+  billRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  openedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TableCafeCountOrderByAggregateInput
   _avg?: Prisma.TableCafeAvgOrderByAggregateInput
   _max?: Prisma.TableCafeMaxOrderByAggregateInput
@@ -238,11 +260,15 @@ export type TableCafeScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"TableCafe"> | number
   tableNumber?: Prisma.StringWithAggregatesFilter<"TableCafe"> | string
   currentSession?: Prisma.StringNullableWithAggregatesFilter<"TableCafe"> | string | null
+  billRequestedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TableCafe"> | Date | string | null
+  openedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TableCafe"> | Date | string | null
 }
 
 export type TableCafeCreateInput = {
   tableNumber: string
   currentSession?: string | null
+  billRequestedAt?: Date | string | null
+  openedAt?: Date | string | null
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
 }
 
@@ -250,12 +276,16 @@ export type TableCafeUncheckedCreateInput = {
   id?: number
   tableNumber: string
   currentSession?: string | null
+  billRequestedAt?: Date | string | null
+  openedAt?: Date | string | null
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
 }
 
 export type TableCafeUpdateInput = {
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
 }
 
@@ -263,6 +293,8 @@ export type TableCafeUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
 }
 
@@ -270,23 +302,31 @@ export type TableCafeCreateManyInput = {
   id?: number
   tableNumber: string
   currentSession?: string | null
+  billRequestedAt?: Date | string | null
+  openedAt?: Date | string | null
 }
 
 export type TableCafeUpdateManyMutationInput = {
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TableCafeUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TableCafeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   currentSession?: Prisma.SortOrder
+  billRequestedAt?: Prisma.SortOrder
+  openedAt?: Prisma.SortOrder
 }
 
 export type TableCafeAvgOrderByAggregateInput = {
@@ -297,12 +337,16 @@ export type TableCafeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   currentSession?: Prisma.SortOrder
+  billRequestedAt?: Prisma.SortOrder
+  openedAt?: Prisma.SortOrder
 }
 
 export type TableCafeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   currentSession?: Prisma.SortOrder
+  billRequestedAt?: Prisma.SortOrder
+  openedAt?: Prisma.SortOrder
 }
 
 export type TableCafeSumOrderByAggregateInput = {
@@ -312,6 +356,10 @@ export type TableCafeSumOrderByAggregateInput = {
 export type TableCafeScalarRelationFilter = {
   is?: Prisma.TableCafeWhereInput
   isNot?: Prisma.TableCafeWhereInput
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type TableCafeCreateNestedOneWithoutOrdersInput = {
@@ -331,12 +379,16 @@ export type TableCafeUpdateOneRequiredWithoutOrdersNestedInput = {
 export type TableCafeCreateWithoutOrdersInput = {
   tableNumber: string
   currentSession?: string | null
+  billRequestedAt?: Date | string | null
+  openedAt?: Date | string | null
 }
 
 export type TableCafeUncheckedCreateWithoutOrdersInput = {
   id?: number
   tableNumber: string
   currentSession?: string | null
+  billRequestedAt?: Date | string | null
+  openedAt?: Date | string | null
 }
 
 export type TableCafeCreateOrConnectWithoutOrdersInput = {
@@ -358,12 +410,16 @@ export type TableCafeUpdateToOneWithWhereWithoutOrdersInput = {
 export type TableCafeUpdateWithoutOrdersInput = {
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TableCafeUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   currentSession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -401,6 +457,8 @@ export type TableCafeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   tableNumber?: boolean
   currentSession?: boolean
+  billRequestedAt?: boolean
+  openedAt?: boolean
   orders?: boolean | Prisma.TableCafe$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCafeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tableCafe"]>
@@ -409,21 +467,27 @@ export type TableCafeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   tableNumber?: boolean
   currentSession?: boolean
+  billRequestedAt?: boolean
+  openedAt?: boolean
 }, ExtArgs["result"]["tableCafe"]>
 
 export type TableCafeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tableNumber?: boolean
   currentSession?: boolean
+  billRequestedAt?: boolean
+  openedAt?: boolean
 }, ExtArgs["result"]["tableCafe"]>
 
 export type TableCafeSelectScalar = {
   id?: boolean
   tableNumber?: boolean
   currentSession?: boolean
+  billRequestedAt?: boolean
+  openedAt?: boolean
 }
 
-export type TableCafeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableNumber" | "currentSession", ExtArgs["result"]["tableCafe"]>
+export type TableCafeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableNumber" | "currentSession" | "billRequestedAt" | "openedAt", ExtArgs["result"]["tableCafe"]>
 export type TableCafeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.TableCafe$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCafeCountOutputTypeDefaultArgs<ExtArgs>
@@ -440,6 +504,8 @@ export type $TableCafePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     id: number
     tableNumber: string
     currentSession: string | null
+    billRequestedAt: Date | null
+    openedAt: Date | null
   }, ExtArgs["result"]["tableCafe"]>
   composites: {}
 }
@@ -867,6 +933,8 @@ export interface TableCafeFieldRefs {
   readonly id: Prisma.FieldRef<"TableCafe", 'Int'>
   readonly tableNumber: Prisma.FieldRef<"TableCafe", 'String'>
   readonly currentSession: Prisma.FieldRef<"TableCafe", 'String'>
+  readonly billRequestedAt: Prisma.FieldRef<"TableCafe", 'DateTime'>
+  readonly openedAt: Prisma.FieldRef<"TableCafe", 'DateTime'>
 }
     
 

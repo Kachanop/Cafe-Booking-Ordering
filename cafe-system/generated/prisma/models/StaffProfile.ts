@@ -41,6 +41,7 @@ export type StaffProfileMinAggregateOutputType = {
   userId: number | null
   bio: string | null
   portfolioUrl: string | null
+  avatarUrl: string | null
 }
 
 export type StaffProfileMaxAggregateOutputType = {
@@ -48,6 +49,7 @@ export type StaffProfileMaxAggregateOutputType = {
   userId: number | null
   bio: string | null
   portfolioUrl: string | null
+  avatarUrl: string | null
 }
 
 export type StaffProfileCountAggregateOutputType = {
@@ -55,6 +57,8 @@ export type StaffProfileCountAggregateOutputType = {
   userId: number
   bio: number
   portfolioUrl: number
+  avatarUrl: number
+  specialties: number
   _all: number
 }
 
@@ -74,6 +78,7 @@ export type StaffProfileMinAggregateInputType = {
   userId?: true
   bio?: true
   portfolioUrl?: true
+  avatarUrl?: true
 }
 
 export type StaffProfileMaxAggregateInputType = {
@@ -81,6 +86,7 @@ export type StaffProfileMaxAggregateInputType = {
   userId?: true
   bio?: true
   portfolioUrl?: true
+  avatarUrl?: true
 }
 
 export type StaffProfileCountAggregateInputType = {
@@ -88,6 +94,8 @@ export type StaffProfileCountAggregateInputType = {
   userId?: true
   bio?: true
   portfolioUrl?: true
+  avatarUrl?: true
+  specialties?: true
   _all?: true
 }
 
@@ -182,6 +190,8 @@ export type StaffProfileGroupByOutputType = {
   userId: number
   bio: string | null
   portfolioUrl: string | null
+  avatarUrl: string | null
+  specialties: string[]
   _count: StaffProfileCountAggregateOutputType | null
   _avg: StaffProfileAvgAggregateOutputType | null
   _sum: StaffProfileSumAggregateOutputType | null
@@ -212,6 +222,8 @@ export type StaffProfileWhereInput = {
   userId?: Prisma.IntFilter<"StaffProfile"> | number
   bio?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
   portfolioUrl?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
+  avatarUrl?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
+  specialties?: Prisma.StringNullableListFilter<"StaffProfile">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -220,6 +232,8 @@ export type StaffProfileOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialties?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -231,6 +245,8 @@ export type StaffProfileWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.StaffProfileWhereInput | Prisma.StaffProfileWhereInput[]
   bio?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
   portfolioUrl?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
+  avatarUrl?: Prisma.StringNullableFilter<"StaffProfile"> | string | null
+  specialties?: Prisma.StringNullableListFilter<"StaffProfile">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
@@ -239,6 +255,8 @@ export type StaffProfileOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialties?: Prisma.SortOrder
   _count?: Prisma.StaffProfileCountOrderByAggregateInput
   _avg?: Prisma.StaffProfileAvgOrderByAggregateInput
   _max?: Prisma.StaffProfileMaxOrderByAggregateInput
@@ -254,11 +272,15 @@ export type StaffProfileScalarWhereWithAggregatesInput = {
   userId?: Prisma.IntWithAggregatesFilter<"StaffProfile"> | number
   bio?: Prisma.StringNullableWithAggregatesFilter<"StaffProfile"> | string | null
   portfolioUrl?: Prisma.StringNullableWithAggregatesFilter<"StaffProfile"> | string | null
+  avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"StaffProfile"> | string | null
+  specialties?: Prisma.StringNullableListFilter<"StaffProfile">
 }
 
 export type StaffProfileCreateInput = {
   bio?: string | null
   portfolioUrl?: string | null
+  avatarUrl?: string | null
+  specialties?: Prisma.StaffProfileCreatespecialtiesInput | string[]
   user: Prisma.UserCreateNestedOneWithoutStaffProfileInput
 }
 
@@ -267,11 +289,15 @@ export type StaffProfileUncheckedCreateInput = {
   userId: number
   bio?: string | null
   portfolioUrl?: string | null
+  avatarUrl?: string | null
+  specialties?: Prisma.StaffProfileCreatespecialtiesInput | string[]
 }
 
 export type StaffProfileUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
   user?: Prisma.UserUpdateOneRequiredWithoutStaffProfileNestedInput
 }
 
@@ -280,6 +306,8 @@ export type StaffProfileUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
 }
 
 export type StaffProfileCreateManyInput = {
@@ -287,11 +315,15 @@ export type StaffProfileCreateManyInput = {
   userId: number
   bio?: string | null
   portfolioUrl?: string | null
+  avatarUrl?: string | null
+  specialties?: Prisma.StaffProfileCreatespecialtiesInput | string[]
 }
 
 export type StaffProfileUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
 }
 
 export type StaffProfileUncheckedUpdateManyInput = {
@@ -299,6 +331,8 @@ export type StaffProfileUncheckedUpdateManyInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
 }
 
 export type StaffProfileNullableScalarRelationFilter = {
@@ -306,11 +340,21 @@ export type StaffProfileNullableScalarRelationFilter = {
   isNot?: Prisma.StaffProfileWhereInput | null
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type StaffProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
+  specialties?: Prisma.SortOrder
 }
 
 export type StaffProfileAvgOrderByAggregateInput = {
@@ -323,6 +367,7 @@ export type StaffProfileMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
 }
 
 export type StaffProfileMinOrderByAggregateInput = {
@@ -330,6 +375,7 @@ export type StaffProfileMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
 }
 
 export type StaffProfileSumOrderByAggregateInput = {
@@ -369,15 +415,28 @@ export type StaffProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffProfileUpdateToOneWithWhereWithoutUserInput, Prisma.StaffProfileUpdateWithoutUserInput>, Prisma.StaffProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type StaffProfileCreatespecialtiesInput = {
+  set: string[]
+}
+
+export type StaffProfileUpdatespecialtiesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type StaffProfileCreateWithoutUserInput = {
   bio?: string | null
   portfolioUrl?: string | null
+  avatarUrl?: string | null
+  specialties?: Prisma.StaffProfileCreatespecialtiesInput | string[]
 }
 
 export type StaffProfileUncheckedCreateWithoutUserInput = {
   id?: number
   bio?: string | null
   portfolioUrl?: string | null
+  avatarUrl?: string | null
+  specialties?: Prisma.StaffProfileCreatespecialtiesInput | string[]
 }
 
 export type StaffProfileCreateOrConnectWithoutUserInput = {
@@ -399,12 +458,16 @@ export type StaffProfileUpdateToOneWithWhereWithoutUserInput = {
 export type StaffProfileUpdateWithoutUserInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
 }
 
 export type StaffProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.StaffProfileUpdatespecialtiesInput | string[]
 }
 
 
@@ -414,6 +477,8 @@ export type StaffProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   userId?: boolean
   bio?: boolean
   portfolioUrl?: boolean
+  avatarUrl?: boolean
+  specialties?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staffProfile"]>
 
@@ -422,6 +487,8 @@ export type StaffProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   bio?: boolean
   portfolioUrl?: boolean
+  avatarUrl?: boolean
+  specialties?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staffProfile"]>
 
@@ -430,6 +497,8 @@ export type StaffProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   bio?: boolean
   portfolioUrl?: boolean
+  avatarUrl?: boolean
+  specialties?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staffProfile"]>
 
@@ -438,9 +507,11 @@ export type StaffProfileSelectScalar = {
   userId?: boolean
   bio?: boolean
   portfolioUrl?: boolean
+  avatarUrl?: boolean
+  specialties?: boolean
 }
 
-export type StaffProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "portfolioUrl", ExtArgs["result"]["staffProfile"]>
+export type StaffProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "portfolioUrl" | "avatarUrl" | "specialties", ExtArgs["result"]["staffProfile"]>
 export type StaffProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -461,6 +532,8 @@ export type $StaffProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     userId: number
     bio: string | null
     portfolioUrl: string | null
+    avatarUrl: string | null
+    specialties: string[]
   }, ExtArgs["result"]["staffProfile"]>
   composites: {}
 }
@@ -889,6 +962,8 @@ export interface StaffProfileFieldRefs {
   readonly userId: Prisma.FieldRef<"StaffProfile", 'Int'>
   readonly bio: Prisma.FieldRef<"StaffProfile", 'String'>
   readonly portfolioUrl: Prisma.FieldRef<"StaffProfile", 'String'>
+  readonly avatarUrl: Prisma.FieldRef<"StaffProfile", 'String'>
+  readonly specialties: Prisma.FieldRef<"StaffProfile", 'String[]'>
 }
     
 

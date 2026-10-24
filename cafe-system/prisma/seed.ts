@@ -28,7 +28,7 @@ async function main() {
   // 1. สร้าง Role
   const roleMember = await prisma.role.create({ data: { name: 'Member', description: 'ลูกค้าทั่วไป' } })
   const roleArtist = await prisma.role.create({ data: { name: 'Artist', description: 'ช่างภาพ/ช่างแต่งหน้า' } })
-  const roleManager = await prisma.role.create({ data: { name: 'Manager', description: 'ผู้จัดการร้าน' } })
+  await prisma.role.create({ data: { name: 'Manager', description: 'ผู้จัดการร้าน' } })
 
   // 2. สร้าง User
   const customer = await prisma.user.create({
@@ -64,7 +64,7 @@ async function main() {
   })
 
   // 5. สร้าง Booking
-  const booking = await prisma.booking.create({
+  await prisma.booking.create({
     data: {
       customerId: customer.id,
       staffId: artist.id,
@@ -106,7 +106,7 @@ async function main() {
   })
 
   // 10. สร้าง OrderItem
-  const orderItem = await prisma.orderItem.create({
+  await prisma.orderItem.create({
     data: {
       orderId: order.id,
       menuItemId: menuLatte.id,

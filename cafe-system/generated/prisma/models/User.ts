@@ -38,6 +38,7 @@ export type UserSumAggregateOutputType = {
 
 export type UserMinAggregateOutputType = {
   id: number | null
+  authUserId: string | null
   roleId: number | null
   phone: string | null
   email: string | null
@@ -48,6 +49,7 @@ export type UserMinAggregateOutputType = {
 
 export type UserMaxAggregateOutputType = {
   id: number | null
+  authUserId: string | null
   roleId: number | null
   phone: string | null
   email: string | null
@@ -58,6 +60,7 @@ export type UserMaxAggregateOutputType = {
 
 export type UserCountAggregateOutputType = {
   id: number
+  authUserId: number
   roleId: number
   phone: number
   email: number
@@ -80,6 +83,7 @@ export type UserSumAggregateInputType = {
 
 export type UserMinAggregateInputType = {
   id?: true
+  authUserId?: true
   roleId?: true
   phone?: true
   email?: true
@@ -90,6 +94,7 @@ export type UserMinAggregateInputType = {
 
 export type UserMaxAggregateInputType = {
   id?: true
+  authUserId?: true
   roleId?: true
   phone?: true
   email?: true
@@ -100,6 +105,7 @@ export type UserMaxAggregateInputType = {
 
 export type UserCountAggregateInputType = {
   id?: true
+  authUserId?: true
   roleId?: true
   phone?: true
   email?: true
@@ -197,6 +203,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: number
+  authUserId: string | null
   roleId: number
   phone: string | null
   email: string | null
@@ -230,6 +237,7 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.IntFilter<"User"> | number
+  authUserId?: Prisma.UuidNullableFilter<"User"> | string | null
   roleId?: Prisma.IntFilter<"User"> | number
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
@@ -244,6 +252,7 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  authUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -258,6 +267,7 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  authUserId?: string
   phone?: string
   email?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -271,10 +281,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   staffProfile?: Prisma.XOR<Prisma.StaffProfileNullableScalarRelationFilter, Prisma.StaffProfileWhereInput> | null
   bookingsMade?: Prisma.BookingListRelationFilter
   bookingsAssigned?: Prisma.BookingListRelationFilter
-}, "id" | "phone" | "email">
+}, "id" | "authUserId" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  authUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -293,6 +304,7 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"User"> | number
+  authUserId?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
   roleId?: Prisma.IntWithAggregatesFilter<"User"> | number
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -302,6 +314,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -315,6 +328,7 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: number
+  authUserId?: string | null
   roleId: number
   phone?: string | null
   email?: string | null
@@ -327,6 +341,7 @@ export type UserUncheckedCreateInput = {
 }
 
 export type UserUpdateInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -340,6 +355,7 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.IntFieldUpdateOperationsInput | number
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -353,6 +369,7 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: number
+  authUserId?: string | null
   roleId: number
   phone?: string | null
   email?: string | null
@@ -362,6 +379,7 @@ export type UserCreateManyInput = {
 }
 
 export type UserUpdateManyMutationInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -371,6 +389,7 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.IntFieldUpdateOperationsInput | number
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -391,6 +410,7 @@ export type UserOrderByRelationAggregateInput = {
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  authUserId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -406,6 +426,7 @@ export type UserAvgOrderByAggregateInput = {
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  authUserId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -416,6 +437,7 @@ export type UserMaxOrderByAggregateInput = {
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  authUserId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -523,6 +545,7 @@ export type UserUpdateOneRequiredWithoutBookingsAssignedNestedInput = {
 }
 
 export type UserCreateWithoutRoleInput = {
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -535,6 +558,7 @@ export type UserCreateWithoutRoleInput = {
 
 export type UserUncheckedCreateWithoutRoleInput = {
   id?: number
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -576,6 +600,7 @@ export type UserScalarWhereInput = {
   OR?: Prisma.UserScalarWhereInput[]
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.IntFilter<"User"> | number
+  authUserId?: Prisma.UuidNullableFilter<"User"> | string | null
   roleId?: Prisma.IntFilter<"User"> | number
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
@@ -585,6 +610,7 @@ export type UserScalarWhereInput = {
 }
 
 export type UserCreateWithoutStaffProfileInput = {
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -597,6 +623,7 @@ export type UserCreateWithoutStaffProfileInput = {
 
 export type UserUncheckedCreateWithoutStaffProfileInput = {
   id?: number
+  authUserId?: string | null
   roleId: number
   phone?: string | null
   email?: string | null
@@ -624,6 +651,7 @@ export type UserUpdateToOneWithWhereWithoutStaffProfileInput = {
 }
 
 export type UserUpdateWithoutStaffProfileInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -636,6 +664,7 @@ export type UserUpdateWithoutStaffProfileInput = {
 
 export type UserUncheckedUpdateWithoutStaffProfileInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.IntFieldUpdateOperationsInput | number
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -647,6 +676,7 @@ export type UserUncheckedUpdateWithoutStaffProfileInput = {
 }
 
 export type UserCreateWithoutBookingsMadeInput = {
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -659,6 +689,7 @@ export type UserCreateWithoutBookingsMadeInput = {
 
 export type UserUncheckedCreateWithoutBookingsMadeInput = {
   id?: number
+  authUserId?: string | null
   roleId: number
   phone?: string | null
   email?: string | null
@@ -675,6 +706,7 @@ export type UserCreateOrConnectWithoutBookingsMadeInput = {
 }
 
 export type UserCreateWithoutBookingsAssignedInput = {
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -687,6 +719,7 @@ export type UserCreateWithoutBookingsAssignedInput = {
 
 export type UserUncheckedCreateWithoutBookingsAssignedInput = {
   id?: number
+  authUserId?: string | null
   roleId: number
   phone?: string | null
   email?: string | null
@@ -714,6 +747,7 @@ export type UserUpdateToOneWithWhereWithoutBookingsMadeInput = {
 }
 
 export type UserUpdateWithoutBookingsMadeInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -726,6 +760,7 @@ export type UserUpdateWithoutBookingsMadeInput = {
 
 export type UserUncheckedUpdateWithoutBookingsMadeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.IntFieldUpdateOperationsInput | number
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -748,6 +783,7 @@ export type UserUpdateToOneWithWhereWithoutBookingsAssignedInput = {
 }
 
 export type UserUpdateWithoutBookingsAssignedInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -760,6 +796,7 @@ export type UserUpdateWithoutBookingsAssignedInput = {
 
 export type UserUncheckedUpdateWithoutBookingsAssignedInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.IntFieldUpdateOperationsInput | number
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -772,6 +809,7 @@ export type UserUncheckedUpdateWithoutBookingsAssignedInput = {
 
 export type UserCreateManyRoleInput = {
   id?: number
+  authUserId?: string | null
   phone?: string | null
   email?: string | null
   passwordHash?: string | null
@@ -780,6 +818,7 @@ export type UserCreateManyRoleInput = {
 }
 
 export type UserUpdateWithoutRoleInput = {
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -792,6 +831,7 @@ export type UserUpdateWithoutRoleInput = {
 
 export type UserUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -804,6 +844,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
 
 export type UserUncheckedUpdateManyWithoutRoleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  authUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -853,6 +894,7 @@ export type UserCountOutputTypeCountBookingsAssignedArgs<ExtArgs extends runtime
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  authUserId?: boolean
   roleId?: boolean
   phone?: boolean
   email?: boolean
@@ -868,6 +910,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  authUserId?: boolean
   roleId?: boolean
   phone?: boolean
   email?: boolean
@@ -879,6 +922,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  authUserId?: boolean
   roleId?: boolean
   phone?: boolean
   email?: boolean
@@ -890,6 +934,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectScalar = {
   id?: boolean
+  authUserId?: boolean
   roleId?: boolean
   phone?: boolean
   email?: boolean
@@ -898,7 +943,7 @@ export type UserSelectScalar = {
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roleId" | "phone" | "email" | "passwordHash" | "fullName" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authUserId" | "roleId" | "phone" | "email" | "passwordHash" | "fullName" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   staffProfile?: boolean | Prisma.User$staffProfileArgs<ExtArgs>
@@ -923,6 +968,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    authUserId: string | null
     roleId: number
     phone: string | null
     email: string | null
@@ -1357,6 +1403,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'Int'>
+  readonly authUserId: Prisma.FieldRef<"User", 'String'>
   readonly roleId: Prisma.FieldRef<"User", 'Int'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>

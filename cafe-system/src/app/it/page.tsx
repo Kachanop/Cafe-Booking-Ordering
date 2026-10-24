@@ -1,0 +1,10 @@
+import Link from "next/link";
+import { requireActor } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+
+export default async function ITDashboard() {
+  const actor = await requireActor(["it staff"]);
+  const [userCount, bookingCount, tableCount, menuCount] = await Promise.all([prisma.user.count(), prisma.booking.count(), prisma.tableCafe.count(), prisma.menuItem.count()]);
+  const config = [{ label: "Supabase URL", ready: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) }, { label: "Supabase publishable/anon key", ready: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) }, { label: "Database connection", ready: Boolean(process.env.DATABASE_URL) }];
+  return <main className="min-h-screen bg-coffee-50 px-4 py-10"><div className="mx-auto max-w-4xl"><Link href="/" className="font-semibold text-coffee-700">Cafe & Studio</Link><h1 className="mt-3 text-3xl font-black text-coffee-900">การตั้งค่าทางเทคนิค</h1><p className="mt-1 text-coffee-600">สวัสดี {actor.profile.fullName} · หน้านี้ไม่แสดงข้อมูลการเงินหรือค่าลับ</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{config.map((item) => <div key={item.label} className="flex justify-between rounded-xl bg-white p-4"><span className="font-semibold text-coffee-800">{item.label}</span><span className={item.ready ? "font-bold text-emerald-700" : "font-bold text-red-700"}>{item.ready ? "ตั้งค่าแล้ว" : "ยังไม่ตั้งค่า"}</span></div>)}</div><h2 className="mt-8 text-xl font-black text-coffee-900">จำนวนข้อมูลในระบบ</h2><div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">{[["บัญชี", userCount], ["การจอง", bookingCount], ["โต๊ะ", tableCount], ["เมนู", menuCount]].map(([label, count]) => <div key={label} className="rounded-xl bg-white p-4"><p className="text-sm text-coffee-500">{label}</p><p className="text-2xl font-black text-coffee-900">{count}</p></div>)}</div><p className="mt-6 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">การสำรองฐานข้อมูลจัดการจาก Supabase Dashboard ตามแพ็กเกจของโปรเจ็กต์</p></div></main>;
+}

@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function UnauthorizedPage() { return <main className="grid min-h-screen place-items-center bg-coffee-50 p-5"><div className="rounded-3xl bg-white p-10 text-center shadow"><h1 className="text-2xl font-black text-coffee-900">ไม่มีสิทธิ์เข้าถึงหน้านี้</h1><p className="mt-3 text-coffee-600">หากคิดว่าเป็นข้อผิดพลาด โปรดติดต่อเจ้าของร้าน</p><Link href="/" className="mt-6 inline-block font-bold text-coffee-700 underline">กลับหน้าหลัก</Link></div></main>; }

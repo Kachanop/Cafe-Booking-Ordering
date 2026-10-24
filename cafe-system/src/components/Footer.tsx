@@ -64,7 +64,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/login" className="hover:text-white transition-colors">
-                  เข้าสู่ระบบพนักงาน & สมาชิก
+                  เข้าสู่ระบบ
+                </Link>
+              </li>
+              <li>
+                <Link href="/signup" className="hover:text-white transition-colors">
+                  สมัครสมาชิก
                 </Link>
               </li>
             </ul>
@@ -124,3 +129,4 @@ export default function Footer() {
     </footer>
   );
 }
+

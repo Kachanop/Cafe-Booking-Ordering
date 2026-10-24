@@ -1,0 +1,13 @@
+import Link from "next/link";
+import { requireActor } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { cancelBooking } from "@/app/actions";
+
+const money = (n: number) => new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB", maximumFractionDigits: 0 }).format(n);
+const statusLabel: Record<string, string> = { Pending: "รอชำระเงิน", Paid: "ยืนยันแล้ว", Completed: "ใช้บริการแล้ว", Cancelled: "ยกเลิก" };
+export default async function MyBookingsPage({ searchParams }: PageProps<"/my-bookings">) {
+  const actor = await requireActor();
+  const params = await searchParams;
+  const bookings = await prisma.booking.findMany({ where: { customerId: actor.profile.id }, include: { staff: true, service: true }, orderBy: { bookingDate: "desc" } });
+  return <main className="min-h-screen bg-coffee-50 px-4 py-10"><div className="mx-auto max-w-4xl"><Link href="/booking" className="font-semibold text-coffee-700">← จองคิวเพิ่ม</Link><h1 className="mt-5 text-3xl font-black text-coffee-900">ประวัติการจองของฉัน</h1>{params.message && <p className="mt-4 rounded-xl bg-emerald-50 p-4 text-emerald-800">{params.message}</p>}<div className="mt-6 space-y-4">{bookings.map((booking) => <article key={booking.id} className="rounded-2xl bg-white p-6 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wide text-coffee-500">{booking.service.name}</p><h2 className="mt-1 text-xl font-extrabold text-coffee-900">{booking.staff.fullName}</h2><p className="mt-2 text-coffee-700">{new Intl.DateTimeFormat("th-TH", { dateStyle: "long", timeZone: "Asia/Bangkok" }).format(booking.bookingDate)} · {booking.timeSlot.replace("-", " – ")}</p>{booking.customerNote && <p className="mt-2 text-sm text-coffee-600">หมายเหตุ: {booking.customerNote}</p>}</div><div className="text-right"><span className="rounded-full bg-coffee-50 px-3 py-1 text-sm font-bold text-coffee-800">{statusLabel[booking.status] ?? booking.status}</span><p className="mt-3 font-black text-coffee-900">{money(booking.totalPrice)}</p></div></div>{booking.status === "Pending" && <div className="mt-4 flex flex-wrap items-center gap-3"><p className="text-sm text-amber-800">กรุณาชำระเต็มจำนวนและติดต่อร้านเพื่อยืนยันการชำระ</p><form action={cancelBooking}><input type="hidden" name="bookingId" value={booking.id} /><button className="rounded-lg border border-red-200 px-3 py-2 text-sm font-bold text-red-700">ยกเลิกคำขอ</button></form></div>}</article>)}{bookings.length === 0 && <div className="rounded-2xl bg-white p-10 text-center text-coffee-600">ยังไม่มีประวัติการจอง</div>}</div></div></main>;
+}

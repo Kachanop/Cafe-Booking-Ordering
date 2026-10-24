@@ -43,6 +43,7 @@ export type OrderMinAggregateOutputType = {
   tableId: number | null
   status: string | null
   totalAmount: number | null
+  createdAt: Date | null
 }
 
 export type OrderMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type OrderMaxAggregateOutputType = {
   tableId: number | null
   status: string | null
   totalAmount: number | null
+  createdAt: Date | null
 }
 
 export type OrderCountAggregateOutputType = {
@@ -57,6 +59,7 @@ export type OrderCountAggregateOutputType = {
   tableId: number
   status: number
   totalAmount: number
+  createdAt: number
   _all: number
 }
 
@@ -78,6 +81,7 @@ export type OrderMinAggregateInputType = {
   tableId?: true
   status?: true
   totalAmount?: true
+  createdAt?: true
 }
 
 export type OrderMaxAggregateInputType = {
@@ -85,6 +89,7 @@ export type OrderMaxAggregateInputType = {
   tableId?: true
   status?: true
   totalAmount?: true
+  createdAt?: true
 }
 
 export type OrderCountAggregateInputType = {
@@ -92,6 +97,7 @@ export type OrderCountAggregateInputType = {
   tableId?: true
   status?: true
   totalAmount?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -186,6 +192,7 @@ export type OrderGroupByOutputType = {
   tableId: number
   status: string
   totalAmount: number
+  createdAt: Date
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
   _sum: OrderSumAggregateOutputType | null
@@ -216,6 +223,7 @@ export type OrderWhereInput = {
   tableId?: Prisma.IntFilter<"Order"> | number
   status?: Prisma.StringFilter<"Order"> | string
   totalAmount?: Prisma.FloatFilter<"Order"> | number
+  createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   table?: Prisma.XOR<Prisma.TableCafeScalarRelationFilter, Prisma.TableCafeWhereInput>
   orderItems?: Prisma.OrderItemListRelationFilter
 }
@@ -225,6 +233,7 @@ export type OrderOrderByWithRelationInput = {
   tableId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   table?: Prisma.TableCafeOrderByWithRelationInput
   orderItems?: Prisma.OrderItemOrderByRelationAggregateInput
 }
@@ -237,6 +246,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   tableId?: Prisma.IntFilter<"Order"> | number
   status?: Prisma.StringFilter<"Order"> | string
   totalAmount?: Prisma.FloatFilter<"Order"> | number
+  createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   table?: Prisma.XOR<Prisma.TableCafeScalarRelationFilter, Prisma.TableCafeWhereInput>
   orderItems?: Prisma.OrderItemListRelationFilter
 }, "id">
@@ -246,6 +256,7 @@ export type OrderOrderByWithAggregationInput = {
   tableId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
   _max?: Prisma.OrderMaxOrderByAggregateInput
@@ -261,11 +272,13 @@ export type OrderScalarWhereWithAggregatesInput = {
   tableId?: Prisma.IntWithAggregatesFilter<"Order"> | number
   status?: Prisma.StringWithAggregatesFilter<"Order"> | string
   totalAmount?: Prisma.FloatWithAggregatesFilter<"Order"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
 }
 
 export type OrderCreateInput = {
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
   table: Prisma.TableCafeCreateNestedOneWithoutOrdersInput
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
 }
@@ -275,12 +288,14 @@ export type OrderUncheckedCreateInput = {
   tableId: number
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableCafeUpdateOneRequiredWithoutOrdersNestedInput
   orderItems?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
 }
@@ -290,6 +305,7 @@ export type OrderUncheckedUpdateInput = {
   tableId?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
 
@@ -298,11 +314,13 @@ export type OrderCreateManyInput = {
   tableId: number
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
 }
 
 export type OrderUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrderUncheckedUpdateManyInput = {
@@ -310,6 +328,7 @@ export type OrderUncheckedUpdateManyInput = {
   tableId?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrderListRelationFilter = {
@@ -327,6 +346,7 @@ export type OrderCountOrderByAggregateInput = {
   tableId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
@@ -340,6 +360,7 @@ export type OrderMaxOrderByAggregateInput = {
   tableId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type OrderMinOrderByAggregateInput = {
@@ -347,6 +368,7 @@ export type OrderMinOrderByAggregateInput = {
   tableId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
@@ -419,6 +441,7 @@ export type OrderUpdateOneRequiredWithoutOrderItemsNestedInput = {
 export type OrderCreateWithoutTableInput = {
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
 }
 
@@ -426,6 +449,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   id?: number
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
 }
 
@@ -463,11 +487,13 @@ export type OrderScalarWhereInput = {
   tableId?: Prisma.IntFilter<"Order"> | number
   status?: Prisma.StringFilter<"Order"> | string
   totalAmount?: Prisma.FloatFilter<"Order"> | number
+  createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
 }
 
 export type OrderCreateWithoutOrderItemsInput = {
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
   table: Prisma.TableCafeCreateNestedOneWithoutOrdersInput
 }
 
@@ -476,6 +502,7 @@ export type OrderUncheckedCreateWithoutOrderItemsInput = {
   tableId: number
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
 }
 
 export type OrderCreateOrConnectWithoutOrderItemsInput = {
@@ -497,6 +524,7 @@ export type OrderUpdateToOneWithWhereWithoutOrderItemsInput = {
 export type OrderUpdateWithoutOrderItemsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableCafeUpdateOneRequiredWithoutOrdersNestedInput
 }
 
@@ -505,17 +533,20 @@ export type OrderUncheckedUpdateWithoutOrderItemsInput = {
   tableId?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrderCreateManyTableInput = {
   id?: number
   status?: string
   totalAmount?: number
+  createdAt?: Date | string
 }
 
 export type OrderUpdateWithoutTableInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItems?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
 }
 
@@ -523,6 +554,7 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
 
@@ -530,6 +562,7 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -568,6 +601,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tableId?: boolean
   status?: boolean
   totalAmount?: boolean
+  createdAt?: boolean
   table?: boolean | Prisma.TableCafeDefaultArgs<ExtArgs>
   orderItems?: boolean | Prisma.Order$orderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -578,6 +612,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableId?: boolean
   status?: boolean
   totalAmount?: boolean
+  createdAt?: boolean
   table?: boolean | Prisma.TableCafeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -586,6 +621,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableId?: boolean
   status?: boolean
   totalAmount?: boolean
+  createdAt?: boolean
   table?: boolean | Prisma.TableCafeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -594,9 +630,10 @@ export type OrderSelectScalar = {
   tableId?: boolean
   status?: boolean
   totalAmount?: boolean
+  createdAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableId" | "status" | "totalAmount", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableId" | "status" | "totalAmount" | "createdAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   table?: boolean | Prisma.TableCafeDefaultArgs<ExtArgs>
   orderItems?: boolean | Prisma.Order$orderItemsArgs<ExtArgs>
@@ -620,6 +657,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tableId: number
     status: string
     totalAmount: number
+    createdAt: Date
   }, ExtArgs["result"]["order"]>
   composites: {}
 }
@@ -1049,6 +1087,7 @@ export interface OrderFieldRefs {
   readonly tableId: Prisma.FieldRef<"Order", 'Int'>
   readonly status: Prisma.FieldRef<"Order", 'String'>
   readonly totalAmount: Prisma.FieldRef<"Order", 'Float'>
+  readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
 }
     
 

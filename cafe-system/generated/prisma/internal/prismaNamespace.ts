@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.10.0
- * Query Engine version: 0edf323efd1d98336f3f0a68684b56f689b900d3
+ * Prisma Client JS version: 7.10.1
+ * Query Engine version: d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.10.0",
-  engine: "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  client: "7.10.1",
+  engine: "d1b3f377ca835d73fd50954a5e22128b9ebdd6b8"
 }
 
 /**
@@ -1291,6 +1291,7 @@ export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof Role
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  authUserId: 'authUserId',
   roleId: 'roleId',
   phone: 'phone',
   email: 'email',
@@ -1306,7 +1307,9 @@ export const StaffProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   bio: 'bio',
-  portfolioUrl: 'portfolioUrl'
+  portfolioUrl: 'portfolioUrl',
+  avatarUrl: 'avatarUrl',
+  specialties: 'specialties'
 } as const
 
 export type StaffProfileScalarFieldEnum = (typeof StaffProfileScalarFieldEnum)[keyof typeof StaffProfileScalarFieldEnum]
@@ -1329,7 +1332,9 @@ export const BookingScalarFieldEnum = {
   bookingDate: 'bookingDate',
   timeSlot: 'timeSlot',
   status: 'status',
-  totalPrice: 'totalPrice'
+  totalPrice: 'totalPrice',
+  customerNote: 'customerNote',
+  createdAt: 'createdAt'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -1338,7 +1343,9 @@ export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeo
 export const TableCafeScalarFieldEnum = {
   id: 'id',
   tableNumber: 'tableNumber',
-  currentSession: 'currentSession'
+  currentSession: 'currentSession',
+  billRequestedAt: 'billRequestedAt',
+  openedAt: 'openedAt'
 } as const
 
 export type TableCafeScalarFieldEnum = (typeof TableCafeScalarFieldEnum)[keyof typeof TableCafeScalarFieldEnum]
@@ -1367,7 +1374,8 @@ export const OrderScalarFieldEnum = {
   id: 'id',
   tableId: 'tableId',
   status: 'status',
-  totalAmount: 'totalAmount'
+  totalAmount: 'totalAmount',
+  createdAt: 'createdAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -1378,7 +1386,8 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   menuItemId: 'menuItemId',
   quantity: 'quantity',
-  kdsStatus: 'kdsStatus'
+  kdsStatus: 'kdsStatus',
+  note: 'note'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
@@ -1390,6 +1399,7 @@ export const PaymentScalarFieldEnum = {
   referenceType: 'referenceType',
   amount: 'amount',
   status: 'status',
+  method: 'method',
   paidAt: 'paidAt'
 } as const
 

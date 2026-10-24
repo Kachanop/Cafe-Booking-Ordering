@@ -1,0 +1,10 @@
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { requireActor } from "@/lib/auth";
+import { completeBooking } from "@/app/actions";
+
+export default async function ArtistDashboard() {
+  const actor = await requireActor(["artist", "manager", "owner"]);
+  const bookings = await prisma.booking.findMany({ where: { staffId: actor.profile.id, status: { in: ["Paid", "Completed"] } }, include: { customer: true, service: true }, orderBy: [{ bookingDate: "asc" }, { timeSlot: "asc" }] });
+  return <main className="min-h-screen bg-coffee-50 px-4 py-10"><div className="mx-auto max-w-5xl"><Link href="/" className="font-semibold text-coffee-700">Cafe & Studio</Link><h1 className="mt-3 text-3xl font-black text-coffee-900">ตารางงานของฉัน</h1><p className="mt-1 text-coffee-600">{actor.profile.fullName}</p><div className="mt-6 space-y-4">{bookings.map((booking) => <article key={booking.id} className="rounded-2xl bg-white p-6 shadow-sm"><div className="flex flex-wrap justify-between gap-4"><div><p className="font-bold text-coffee-500">{booking.service.name} · {booking.status === "Paid" ? "ยืนยันแล้ว" : "เสร็จสิ้น"}</p><h2 className="mt-1 text-xl font-black text-coffee-900">{booking.customer.fullName}</h2><p className="mt-2 text-coffee-700">{booking.bookingDate.toLocaleDateString("th-TH", { timeZone: "Asia/Bangkok", dateStyle: "long" })} · {booking.timeSlot}</p>{booking.customer.phone && <p className="mt-1 text-sm text-coffee-600">โทร {booking.customer.phone}</p>}{booking.customerNote && <p className="mt-2 rounded-lg bg-coffee-50 p-3 text-sm">หมายเหตุ: {booking.customerNote}</p>}</div>{booking.status === "Paid" && <form action={completeBooking} className="self-end"><input type="hidden" name="bookingId" value={booking.id} /><button className="rounded-xl bg-coffee-800 px-5 py-3 font-bold text-white">บันทึกว่าให้บริการแล้ว</button></form>}</div></article>)}{!bookings.length && <p className="rounded-2xl bg-white p-8 text-coffee-600">ยังไม่มีคิวงานที่ยืนยัน</p>}</div></div></main>;
+}

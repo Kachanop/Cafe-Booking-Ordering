@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
-import { Coffee, Sparkles, CakeSlice, QrCode, CheckCircle2, ArrowDown, MapPin, Clock, Phone, Mail } from "lucide-react";
+import type { Prisma } from "../../generated/prisma/client";
+import { Coffee, Sparkles, CakeSlice, CheckCircle2, ArrowDown } from "lucide-react";
 
 export const revalidate = 0; // ดึงข้อมูลสดใหม่จาก Supabase เสมอ
 
@@ -47,7 +48,7 @@ const getMenuItemImage = (name: string) => {
 
 export default async function Home() {
   // ดึงหมวดหมู่และรายการเมนูทั้งหมดจากฐานข้อมูล Supabase
-  let categories: any[] = [];
+  let categories: Prisma.MenuCategoryGetPayload<{ include: { menuItems: true } }>[] = [];
   try {
     categories = await prisma.menuCategory.findMany({
       include: {
@@ -186,7 +187,7 @@ export default async function Home() {
 
               {/* Items Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {category.menuItems?.map((item: any) => (
+                {category.menuItems.map((item) => (
                   <div
                     key={item.id}
                     className="group bg-white rounded-3xl overflow-hidden border border-coffee-100 shadow-sm hover:shadow-xl hover:border-coffee-300 transition-all duration-300 flex flex-col h-[430px]"
