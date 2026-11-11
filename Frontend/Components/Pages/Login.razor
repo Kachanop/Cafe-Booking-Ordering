@@ -1,0 +1,4 @@
+@page "/login"
+@inject CafeApi Api
+<PageTitle>เข้าสู่ระบบ</PageTitle><main class="content auth"><h1>เข้าสู่ระบบ</h1>@if(error is not null){<p class="notice">@error</p>}<form class="form-card" @onsubmit="LoginAsync" @onsubmit:preventDefault><label>อีเมล<input @bind="email" type="email" required /></label><label>รหัสผ่าน<input @bind="password" type="password" required /></label><button class="button">เข้าสู่ระบบ</button></form><p>ยังไม่มีบัญชี? <a href="/signup">สมัครสมาชิก</a></p></main>
+@code {private string email="",password="";private string? error;private async Task LoginAsync(){try{if(await Api.Login(email,password) is null)error="อีเมลหรือรหัสผ่านไม่ถูกต้อง";else Nav.NavigateTo("/");}catch{error="เชื่อมต่อ Backend ไม่ได้";}} [Inject] NavigationManager Nav {get;set;}=default!;}

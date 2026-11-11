@@ -1,0 +1,21 @@
+@page "/kds"
+@page "/cashier"
+@page "/admin"
+@page "/artist-dashboard"
+@page "/it"
+@inject CafeApi Api
+@inject NavigationManager Nav
+<PageTitle>@Title · Cafe & Studio</PageTitle><main class="content"><a href="/">← กลับหน้าหลัก</a><h1>@Title</h1>@if(error is not null){<p class="notice">@error</p>}
+@if(path=="/kds"){@foreach(var item in kitchen){<article class="card"><span class="tag">@item.Table · @item.KdsStatus</span><h3>@item.Menu × @item.Quantity</h3><p>@item.Note</p>@if(item.KdsStatus=="Pending"){<button class="button" @onclick='() => Advance(item.Id, "Cooking")'>เริ่มทำ</button>}else if(item.KdsStatus=="Cooking"){<button class="button" @onclick='() => Advance(item.Id, "Served")'>เสิร์ฟแล้ว</button>}</article>}}
+else if(path=="/cashier"){@foreach(var row in cashier){<article class="card"><h3>@row.TableNumber · บิล #@row.OrderId</h3><p>@row.TotalAmount.ToString("N0") บาท</p><p>รอรับชำระ</p><button class="button" @onclick="()=>Close(row.TableId)">รับเงินสดและปิดบิล</button></article>}}
+else if(path=="/admin"&&overview is not null){<div class="cards"><article class="card"><h3>สมาชิก</h3><p>@overview.Users</p></article><article class="card"><h3>จองวันนี้</h3><p>@overview.BookingsToday</p></article><article class="card"><h3>โต๊ะเปิด</h3><p>@overview.OpenTables</p></article><article class="card"><h3>รอยืนยันจอง</h3><p>@overview.PendingBookings</p></article><article class="card"><h3>ยอดรับวันนี้</h3><p>@overview.PaidToday.ToString("N0") บาท</p></article></div>@foreach(var b in bookings.Where(x=>x.Status=="Pending")){<article class="card"><h3>Booking #@b.Id · @b.TotalPrice.ToString("N0") บาท</h3><button class="button" @onclick="()=>MarkPaid(b.Id)">ยืนยันรับเงินสด</button></article>}}
+else if(path=="/it"&&itData is not null){<pre class="card">@itData</pre>}
+else if(path=="/artist-dashboard"){@foreach(var b in bookings){<article class="card"><h3>Booking #@b.Id · @b.Status</h3><p>@b.BookingDate.ToString("dd MMM yyyy") · @b.TimeSlot</p></article>}}
+</main>
+@code {
+    private string path="";private string Title=>path switch{"/kds"=>"หน้าจอครัว","/cashier"=>"แคชเชียร์","/admin"=>"ภาพรวมผู้จัดการ","/artist-dashboard"=>"ตารางงานช่าง","/it"=>"สถานะระบบ",_=>"Cafe & Studio"};private string? error;private List<KitchenItemDto> kitchen=[];private List<CashierRow> cashier=[];private List<BookingDto> bookings=[];private OverviewDto? overview;private string? itData;
+    protected override async Task OnInitializedAsync(){path=new Uri(Nav.Uri).AbsolutePath;try{switch(path){case "/kds": kitchen=await Api.GetAuthorized<KitchenItemDto>("api/kds");break;case "/cashier":cashier=await Api.GetAuthorized<CashierRow>("api/cashier");break;case "/admin":overview=await Api.GetAuthorizedObject<OverviewDto>("api/admin/overview");bookings=await Api.GetBookings();break;case "/artist-dashboard":bookings=await Api.GetBookings();break;case "/it":itData=(await Api.GetAuthorizedObject<System.Text.Json.JsonElement>("api/it/overview")).ToString();break;}}catch(System.Net.Http.HttpRequestException){error="กรุณาเข้าสู่ระบบด้วยบัญชีที่มีสิทธิ์ หรือ Backend ไม่พร้อมใช้งาน.";}catch{error="โหลดข้อมูลไม่สำเร็จ";}}
+    private async Task Advance(int id,string status){try{await Api.UpdateKitchen(id,status);kitchen=await Api.GetAuthorized<KitchenItemDto>("api/kds");}catch{error="เปลี่ยนสถานะไม่ได้ กรุณาตรวจสิทธิ์บัญชี";}}
+    private async Task Close(int id){try{await Api.CloseTable(id);cashier=await Api.GetAuthorized<CashierRow>("api/cashier");}catch{error="ปิดบิลไม่ได้ ตรวจสอบว่าสถานะอาหารเสิร์ฟครบแล้ว";}}
+    private async Task MarkPaid(int id){try{await Api.MarkBookingPaid(id);bookings=await Api.GetBookings();}catch{error="ยืนยันรับชำระไม่ได้";}}
+}

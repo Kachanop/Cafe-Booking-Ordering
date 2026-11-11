@@ -1,0 +1,6 @@
+@inherits LayoutComponentBase
+@inject FrontendSession Session
+<header class="site-header"><a class="brand" href="/">CAFE <span>&</span> STUDIO</a><nav><a href="/booking">จองคิว</a><a href="/#menu">เมนู</a><a href="/my-bookings">การจองของฉัน</a>@if(Session.Token is null){<a href="/login">เข้าสู่ระบบ</a>}else{<span>@Session.Name</span>}</nav></header>
+@Body
+<footer class="site-footer">Cafe & Studio · ระบบจองและสั่งอาหาร</footer>
+<div id="blazor-error-ui" data-nosnippet>เกิดข้อผิดพลาด <a href="." class="reload">โหลดใหม่</a><span class="dismiss">×</span></div>

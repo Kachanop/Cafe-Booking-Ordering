@@ -1,0 +1,24 @@
+@page "/booking"
+@page "/my-bookings"
+@inject CafeApi Api
+@inject FrontendSession Session
+@inject NavigationManager Nav
+<PageTitle>@(IsHistory ? "การจองของฉัน" : "จองคิวสตูดิโอ") · Cafe & Studio</PageTitle>
+<main class="content"><a href="/">← กลับหน้าหลัก</a><h1>@(IsHistory ? "การจองของฉัน" : "จองคิวสตูดิโอ")</h1>
+    @if(error is not null){<p class="notice">@error</p>}
+    @if(IsHistory)
+    {
+        @if(Session.Token is null){<p>เข้าสู่ระบบเพื่อดูรายการจองของคุณ <a href="/login">เข้าสู่ระบบ</a></p>}
+        else {<div class="cards">@foreach(var b in bookings){<article class="card"><span class="tag">@b.Status</span><h3>Booking #@b.Id</h3><p>@b.BookingDate.ToString("dd MMM yyyy") · @b.TimeSlot</p><p>@b.TotalPrice.ToString("N0") บาท</p>@if(b.Status=="Pending"){<button class="button" @onclick="()=>Cancel(b.Id)">ยกเลิกการจอง</button>}</article>}</div>}
+    }
+    else if(Session.Token is null){<p>เข้าสู่ระบบในฐานะสมาชิกก่อนจอง <a href="/login">เข้าสู่ระบบ</a></p>}
+    else if(artists.Count==0||services.Count==0){<p>ยังไม่มีช่างหรือบริการในระบบ กรุณาติดต่อผู้จัดการร้านเพื่อเพิ่มข้อมูล</p>}
+    else{<form class="form-card" @onsubmit="Submit" @onsubmit:preventDefault><label>ช่าง<select @bind="staffId"><option value="0">เลือกช่าง</option>@foreach(var a in artists){<option value="@a.Id">@a.FullName</option>}</select></label><label>บริการ<select @bind="serviceId"><option value="0">เลือกบริการ</option>@foreach(var s in services){<option value="@s.Id">@s.Name · @s.Price.ToString("N0") บาท</option>}</select></label><label>วันที่<input @bind="bookingDate" type="date" required /></label><label>รอบเวลา<select @bind="slot"><option value="10:00-12:00">10:00-12:00</option><option value="13:00-15:00">13:00-15:00</option><option value="15:00-17:00">15:00-17:00</option><option value="17:00-19:00">17:00-19:00</option></select></label><label>หมายเหตุ<input @bind="note" maxlength="500" /></label><button class="button">ส่งคำขอจอง</button></form>}
+</main>
+@code {
+    private bool IsHistory => new Uri(Nav.Uri).AbsolutePath == "/my-bookings";
+    private List<BookingDto> bookings=[];private List<ArtistDto> artists=[];private List<ServiceDto> services=[];private int staffId,serviceId;private DateTime bookingDate=DateTime.Today;private string slot="10:00-12:00",note="";private string? error;
+    protected override async Task OnInitializedAsync(){try{if(IsHistory&&Session.Token is not null)bookings=await Api.GetBookings();if(!IsHistory){artists=await Api.GetArtists();services=await Api.GetServices();}}catch{error="เชื่อมต่อ Backend ไม่ได้";}}
+    private async Task Submit(){var result=await Api.CreateBooking(staffId,serviceId,bookingDate,slot,note);if(result.ok)Nav.NavigateTo("/my-bookings");else error=result.error;}
+    private async Task Cancel(int id){try{await Api.CancelBooking(id);bookings=await Api.GetBookings();}catch{error="ยกเลิกการจองไม่สำเร็จ";}}
+}

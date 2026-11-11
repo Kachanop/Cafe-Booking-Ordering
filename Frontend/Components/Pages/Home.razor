@@ -1,0 +1,7 @@
+@page "/"
+@inject CafeApi Api
+@inject FrontendSession Session
+<PageTitle>Cafe & Studio</PageTitle>
+<section class="hero"><p class="eyebrow">CAFE & STUDIO</p><h1>กาแฟดี ๆ กับช่วงเวลาพิเศษของคุณ</h1><p>สั่งอาหารที่โต๊ะ หรือจองคิวช่างภาพและช่างแต่งหน้าได้ในที่เดียว</p><div class="actions"><a class="button" href="/booking">จองคิวสตูดิโอ</a><a class="button secondary" href="#menu">ดูเมนู</a></div></section>
+<main class="content"><div class="quick-links"><a href="/booking">จองคิว</a><a href="/my-bookings">การจองของฉัน</a><a href="/cashier">แคชเชียร์</a><a href="/kds">หน้าจอครัว</a><a href="/admin">จัดการร้าน</a>@if(Session.Token is null){<a href="/login">เข้าสู่ระบบ</a>}</div><section id="menu"><h2>เมนูแนะนำ</h2>@if(error is not null){<p class="notice">@error</p>}<div class="cards">@foreach(var item in menu){<article class="card"><span class="tag">@item.Category</span><h3>@item.Name</h3><p>@item.Price.ToString("N0") บาท</p></article>}</div></section></main>
+@code { private List<MenuItemDto> menu=[]; private string? error; protected override async Task OnInitializedAsync(){try{menu=await Api.GetMenu();}catch{error="เชื่อมต่อ Backend ไม่ได้ กรุณาตรวจสอบว่า API กำลังทำงานอยู่";}} }

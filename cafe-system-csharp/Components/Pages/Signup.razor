@@ -1,0 +1,9 @@
+@page "/signup"
+@using Microsoft.AspNetCore.Components
+<PageTitle>สมัครสมาชิก · Cafe & Studio</PageTitle>
+<main class="content auth"><h1>สมัครสมาชิก</h1><p>สร้างบัญชีลูกค้าสมาชิก</p>
+    @if (!string.IsNullOrWhiteSpace(Error)) { <p class="notice" role="alert">@Error</p> }
+    <form method="post" action="/auth/signup" class="form-card"><label>ชื่อที่แสดง<input name="fullName" required maxlength="100" /></label><label>อีเมล<input name="email" type="email" required autocomplete="email" /></label><label>รหัสผ่าน<input name="password" type="password" minlength="8" required autocomplete="new-password" /></label><button class="button" type="submit">สมัครสมาชิก</button></form>
+    <p>มีบัญชีแล้ว? <a href="/login">เข้าสู่ระบบ</a></p>
+</main>
+@code { [SupplyParameterFromQuery(Name="error")] public string? Error { get; set; } }

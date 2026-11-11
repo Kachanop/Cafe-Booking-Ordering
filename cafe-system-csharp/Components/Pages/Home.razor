@@ -1,0 +1,33 @@
+@page "/"
+@using CafeSystem.Data
+@using CafeSystem.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<CafeDbContext> DbFactory
+
+<PageTitle>Cafe & Studio</PageTitle>
+<section class="hero">
+    <p class="eyebrow">CAFE & STUDIO</p>
+    <h1>กาแฟดี ๆ กับช่วงเวลาพิเศษของคุณ</h1>
+    <p>สั่งอาหารที่โต๊ะ หรือจองคิวช่างภาพและช่างแต่งหน้าได้ในที่เดียว</p>
+    <div class="actions"><a class="button" href="/booking">จองคิวสตูดิโอ</a><a class="button secondary" href="#menu">ดูเมนู</a></div>
+</section>
+<main class="content">
+    <div class="quick-links"><a href="/my-bookings">การจองของฉัน</a><a href="/cashier">แคชเชียร์</a><a href="/kds">หน้าจอครัว</a><a href="/admin">จัดการร้าน</a><a href="/it">สถานะระบบ</a></div>
+    <section id="menu"><h2>เมนูแนะนำ</h2>
+        @if (Loading) { <p>กำลังโหลดเมนู…</p> }
+        else if (!Configured) { <p class="notice">ตั้งค่า DATABASE_URL เพื่อเชื่อมต่อเมนู PostgreSQL</p> }
+        else if (Items.Count == 0) { <p>ยังไม่มีเมนูที่เปิดขาย</p> }
+        else { <div class="cards">@foreach (var item in Items) { <article class="card"><span class="tag">@item.Category</span><h3>@item.Name</h3><p>@item.Price.ToString("N0") บาท</p></article> }</div> }
+    </section>
+</main>
+@code {
+    private bool Loading = true, Configured;
+    private List<MenuCard> Items = [];
+    protected override async Task OnInitializedAsync()
+    {
+        Configured = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DATABASE_URL"));
+        if (Configured) { await using var db = await DbFactory.CreateDbContextAsync(); Items = await (from m in db.MenuItems where m.IsAvailable join c in db.MenuCategories on m.CategoryId equals c.Id orderby c.Id, m.Id select new MenuCard(m.Name, c.Name, m.Price)).ToListAsync(); }
+        Loading = false;
+    }
+    private sealed record MenuCard(string Name, string Category, decimal Price);
+}

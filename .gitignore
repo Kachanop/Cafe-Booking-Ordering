@@ -1,0 +1,5 @@
+**/bin/
+**/obj/
+Backend/Data/cafe.db
+Backend/Data/cafe.db-shm
+Backend/Data/cafe.db-wal

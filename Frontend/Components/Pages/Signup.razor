@@ -1,0 +1,5 @@
+@page "/signup"
+@inject CafeApi Api
+@inject NavigationManager Nav
+<PageTitle>สมัครสมาชิก</PageTitle><main class="content auth"><h1>สมัครสมาชิก</h1>@if(error is not null){<p class="notice">@error</p>}<form class="form-card" @onsubmit="Register" @onsubmit:preventDefault><label>ชื่อที่แสดง<input @bind="name" required maxlength="100" /></label><label>อีเมล<input @bind="email" type="email" required /></label><label>รหัสผ่าน<input @bind="password" type="password" minlength="8" required /></label><button class="button">สร้างบัญชี</button></form><p>มีบัญชีแล้ว? <a href="/login">เข้าสู่ระบบ</a></p></main>
+@code {private string name="",email="",password="";private string? error;private async Task Register(){try{var result=await Api.Register(email,password,name);if(result.ok)Nav.NavigateTo("/");else error=result.error;}catch{error="เชื่อมต่อ Backend ไม่ได้";}}}
