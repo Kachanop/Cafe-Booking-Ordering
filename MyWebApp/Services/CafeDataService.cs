@@ -30,20 +30,26 @@ public sealed class CafeDataService(
             if (!await db.Roles.AnyAsync(x => x.Name == name)) db.Roles.Add(new Role { Name = name });
         await db.SaveChangesAsync();
 
+        await EnsureLocalStaffAccountsAsync(db);
+
         var ownerEmail = configuration["BootstrapOwner:Email"]?.Trim().ToLowerInvariant();
         var ownerPassword = configuration["BootstrapOwner:Password"];
-        if (!string.IsNullOrWhiteSpace(ownerEmail) && !string.IsNullOrWhiteSpace(ownerPassword) && ownerPassword.Length >= 12)
+        if (!string.IsNullOrWhiteSpace(ownerEmail))
         {
             var ownerRole = await db.Roles.SingleAsync(x => x.Name == "Owner");
             var owner = await db.Users.SingleOrDefaultAsync(x => x.Email == ownerEmail);
-            if (owner is null)
+            if (owner is not null)
+            {
+                owner.RoleId = ownerRole.Id;
+                await db.SaveChangesAsync();
+            }
+            else if (!string.IsNullOrWhiteSpace(ownerPassword) && ownerPassword.Length >= 12)
             {
                 owner = new CafeUser { Email = ownerEmail, FullName = configuration["BootstrapOwner:FullName"] ?? "ร้าน Cafe & Studio", RoleId = ownerRole.Id, CreatedAt = DateTime.UtcNow };
                 owner.PasswordHash = passwordHasher.HashPassword(owner, ownerPassword);
                 db.Users.Add(owner);
+                await db.SaveChangesAsync();
             }
-            else owner.RoleId = ownerRole.Id;
-            await db.SaveChangesAsync();
         }
 
         if (!await db.MenuCategories.AnyAsync())
@@ -64,13 +70,67 @@ public sealed class CafeDataService(
         if (!await db.StaffProfiles.AnyAsync())
         {
             var artistRoleId = await db.Roles.Where(x => x.Name == "Artist").Select(x => x.Id).SingleAsync();
-            var artist = new CafeUser { FullName = "ช่างภาพประจำสตูดิโอ", RoleId = artistRoleId, CreatedAt = DateTime.UtcNow };
-            db.Users.Add(artist);
-            await db.SaveChangesAsync();
+            var artist = await db.Users.FirstOrDefaultAsync(x => x.RoleId == artistRoleId);
+            if (artist is null)
+            {
+                artist = new CafeUser { FullName = "ช่างภาพประจำสตูดิโอ", RoleId = artistRoleId, CreatedAt = DateTime.UtcNow };
+                db.Users.Add(artist);
+                await db.SaveChangesAsync();
+            }
             db.StaffProfiles.Add(new StaffProfile { UserId = artist.Id, Bio = "ช่างภาพและช่างแต่งหน้าประจำสตูดิโอ", Specialties = ["Portrait", "Makeup"] });
         }
         await db.SaveChangesAsync();
     }
+
+    private async Task EnsureLocalStaffAccountsAsync(CafeDbContext db)
+    {
+        var directory = Path.GetDirectoryName(db.Database.GetDbConnection().DataSource)!;
+        Directory.CreateDirectory(directory);
+        var credentialsPath = Path.Combine(directory, "local-accounts.json");
+        List<LocalAccountCredential> credentials;
+        if (File.Exists(credentialsPath))
+        {
+            credentials = JsonSerializer.Deserialize<List<LocalAccountCredential>>(await File.ReadAllTextAsync(credentialsPath)) ?? [];
+        }
+        else
+        {
+            credentials =
+            [
+                NewCredential("artist@cafe.local", "ช่างภาพ/ช่างแต่งหน้า", "Artist"),
+                NewCredential("waiter@cafe.local", "พนักงานบริการ", "Waiter"),
+                NewCredential("kitchen@cafe.local", "พนักงานครัว", "Kitchen"),
+                NewCredential("cashier@cafe.local", "แคชเชียร์", "Cashier"),
+                NewCredential("manager@cafe.local", "ผู้จัดการร้าน", "Manager"),
+                NewCredential("it@cafe.local", "ผู้ดูแลระบบ IT", "IT Staff"),
+                NewCredential("owner@cafe.local", "เจ้าของร้าน", "Owner")
+            ];
+            await File.WriteAllTextAsync(credentialsPath, JsonSerializer.Serialize(credentials, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+        foreach (var credential in credentials)
+        {
+            var email = credential.Email.Trim().ToLowerInvariant();
+            var user = await db.Users.SingleOrDefaultAsync(x => x.Email == email);
+            if (user is null)
+            {
+                var role = await db.Roles.SingleOrDefaultAsync(x => x.Name == credential.Role);
+                if (role is null) continue;
+                user = new CafeUser { Email = email, FullName = credential.FullName, RoleId = role.Id, CreatedAt = DateTime.UtcNow };
+                user.PasswordHash = passwordHasher.HashPassword(user, credential.Password);
+                db.Users.Add(user);
+                await db.SaveChangesAsync();
+            }
+
+            if (credential.Role == "Artist" && !await db.StaffProfiles.AnyAsync(x => x.UserId == user.Id))
+                db.StaffProfiles.Add(new StaffProfile { UserId = user.Id, Bio = "ช่างภาพและช่างแต่งหน้าประจำสตูดิโอ", Specialties = ["Portrait", "Makeup"] });
+        }
+        await db.SaveChangesAsync();
+    }
+
+    private static LocalAccountCredential NewCredential(string email, string fullName, string role) =>
+        new(email, fullName, role, Convert.ToBase64String(RandomNumberGenerator.GetBytes(18)).TrimEnd('=').Replace('+', '-').Replace('/', '_'));
+
+    private sealed record LocalAccountCredential(string Email, string FullName, string Role, string Password);
 
     public async Task<HomeViewModel> GetHomeAsync()
     {
@@ -306,7 +366,7 @@ public sealed class CafeDataService(
     public async Task<List<TableDto>> GetTablesAsync()
     {
         await using var db = await factory.CreateDbContextAsync();
-        return await db.Tables.OrderBy(x => x.Id).Select(x => new TableDto(x.Id, x.TableNumber, x.CurrentSession != null, x.BillRequestedAt)).ToListAsync();
+        return await db.Tables.OrderBy(x => x.Id).Select(x => new TableDto(x.Id, x.TableNumber, x.CurrentSession != null, x.BillRequestedAt, x.CurrentSession)).ToListAsync();
     }
 
     public async Task<KdsViewModel> GetKdsAsync(bool summary)
@@ -345,11 +405,19 @@ public sealed class CafeDataService(
             var items = await (from line in db.OrderItems join menu in db.MenuItems on line.MenuItemId equals menu.Id where line.OrderId == order.Id select new CashierLineDto(menu.Name, line.Quantity, line.UnitPrice)).ToListAsync();
             rows.Add(new CashierRow(table.Id, table.TableNumber, table.BillRequestedAt, order.Id, order.TotalAmount, items));
         }
+        var paidTables = new List<CashierPaidTableDto>();
+        var openTables = await db.Tables.Where(x => x.CurrentSession != null && x.OpenedAt != null).OrderBy(x => x.Id).ToListAsync();
+        foreach (var table in openTables)
+        {
+            var sessionOrders = await db.Orders.Where(x => x.TableId == table.Id && x.CreatedAt >= table.OpenedAt).ToListAsync();
+            if (sessionOrders.Count > 0 && sessionOrders.All(x => x.Status == "Paid"))
+                paidTables.Add(new CashierPaidTableDto(table.Id, table.TableNumber, sessionOrders.Sum(x => x.TotalAmount)));
+        }
         var bookings = await BookingQuery(db, db.Bookings.Where(x => x.Status == "Pending"));
-        return new CashierViewModel { Bills = rows, PendingBookings = bookings };
+        return new CashierViewModel { Bills = rows, PaidTables = paidTables, PendingBookings = bookings };
     }
 
-    public async Task<(bool Ok, string? Error)> CloseTableAsync(int id, string method)
+    public async Task<(bool Ok, string? Error)> PayTableAsync(int id, string method)
     {
         if (method is not ("CASH" or "PROMPTPAY")) return (false, "ช่องทางชำระเงินไม่ถูกต้อง");
         await using var db = await factory.CreateDbContextAsync();
@@ -359,7 +427,23 @@ public sealed class CafeDataService(
         var orderIds = orders.Select(x => x.Id).ToArray();
         if (await db.OrderItems.AnyAsync(x => orderIds.Contains(x.OrderId) && x.KdsStatus != "Served")) return (false, "ยังมีรายการที่ครัวทำไม่เสร็จ");
         foreach (var order in orders) { order.Status = "Paid"; db.Payments.Add(new Payment { ReferenceId = order.Id, ReferenceType = "ORDER", Amount = order.TotalAmount, Method = method, Status = "Success", PaidAt = DateTime.UtcNow }); }
-        table.CurrentSession = null; table.OpenedAt = null; table.BillRequestedAt = null;
+        table.CurrentSession = null;
+        table.OpenedAt = null;
+        table.BillRequestedAt = null;
+        await db.SaveChangesAsync();
+        return (true, null);
+    }
+
+    public async Task<(bool Ok, string? Error)> ClosePaidTableAsync(int id)
+    {
+        await using var db = await factory.CreateDbContextAsync();
+        var table = await db.Tables.FindAsync(id);
+        if (table?.CurrentSession is null || table.OpenedAt is null) return (false, "โต๊ะนี้ปิดไปแล้วหรือไม่มีรอบใช้งาน");
+        var orders = await db.Orders.Where(x => x.TableId == id && x.CreatedAt >= table.OpenedAt).ToListAsync();
+        if (orders.Count == 0 || orders.Any(x => x.Status != "Paid")) return (false, "กรุณารับชำระทุกรายการของโต๊ะนี้ก่อนปิดโต๊ะ");
+        table.CurrentSession = null;
+        table.OpenedAt = null;
+        table.BillRequestedAt = null;
         await db.SaveChangesAsync();
         return (true, null);
     }

@@ -5,7 +5,7 @@ using QRCoder;
 
 namespace MyWebApp.Controllers;
 
-public sealed class TableController(CafeDataService cafe) : Controller
+public sealed class TableController(CafeDataService cafe, IConfiguration configuration) : Controller
 {
     [HttpGet("table/{id:int}")]
     public async Task<IActionResult> Index(int id, string session)
@@ -20,7 +20,7 @@ public sealed class TableController(CafeDataService cafe) : Controller
     public async Task<IActionResult> Qr(int id, string session)
     {
         if (string.IsNullOrWhiteSpace(session) || await cafe.GetTableSessionAsync(id, session) is null) return NotFound();
-        var url = $"{Request.Scheme}://{Request.Host}/table/{id}?session={Uri.EscapeDataString(session)}";
+        var url = $"{CafeUrlBuilder.GetBaseUrl(Request, configuration)}/table/{id}?session={Uri.EscapeDataString(session)}";
         using var generator = new QRCodeGenerator();
         using var data = generator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
         return File(new PngByteQRCode(data).GetGraphic(9), "image/png");

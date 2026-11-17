@@ -11,9 +11,10 @@ public sealed record BookingDto(int Id, int CustomerId, string CustomerName, int
 public sealed record KitchenItemDto(int Id, int OrderId, string Table, string Menu, int Quantity, string KdsStatus, string? Note, DateTime CreatedAt);
 public sealed record CashierLineDto(string Menu, int Quantity, decimal Price);
 public sealed record CashierRow(int TableId, string TableNumber, DateTime? BillRequestedAt, int OrderId, decimal TotalAmount, List<CashierLineDto> Items);
+public sealed record CashierPaidTableDto(int TableId, string TableNumber, decimal TotalAmount);
 public sealed record OverviewDto(int Users, int BookingsToday, int OpenTables, int PendingBookings, decimal PaidToday, decimal CafeRevenue, decimal StudioRevenue);
 public sealed record StaffDto(int Id, string FullName, string? Email, string? Phone, string Role);
-public sealed record TableDto(int Id, string TableNumber, bool IsOpen, DateTime? BillRequestedAt);
+public sealed record TableDto(int Id, string TableNumber, bool IsOpen, DateTime? BillRequestedAt, string? Session);
 public sealed record OpenedTableDto(int Id, string TableNumber, string Session, string Url);
 public sealed record TableSessionDto(int Id, string TableNumber, bool BillRequested, List<MenuItemDto> Menu, List<TableOrderDto> Orders);
 public sealed record TableOrderDto(int Id, string Status, decimal TotalAmount, List<TableOrderLineDto> Items);
@@ -29,7 +30,7 @@ public sealed class RoleForm { public int Id { get; set; } [Required] public str
 public sealed class AdminViewModel { public OverviewDto? Overview { get; init; } public List<BookingDto> Bookings { get; init; }=[]; public List<MenuItemDto> Menu { get; init; }=[]; public List<ServiceDto> Services { get; init; }=[]; public List<StaffDto> Staff { get; init; }=[]; }
 public sealed record KitchenSummaryDto(string Menu, int Quantity);
 public sealed class KdsViewModel { public List<KitchenItemDto> Items { get; init; }=[]; public List<KitchenSummaryDto> SummaryItems {get;init;}=[]; public bool Summary { get; init; } }
-public sealed class CashierViewModel { public List<CashierRow> Bills {get;init;}=[];public List<BookingDto> PendingBookings {get;init;}=[]; }
+public sealed class CashierViewModel { public List<CashierRow> Bills {get;init;}=[];public List<CashierPaidTableDto> PaidTables {get;init;}=[];public List<BookingDto> PendingBookings {get;init;}=[]; }
 public sealed class HomeViewModel { public List<MenuItemDto> Menu { get; init; }=[]; public List<ArtistDto> Artists { get; init; }=[]; public List<ServiceDto> Services { get; init; }=[]; public string? Error { get; init; } }
 public sealed class BookingPageViewModel { public List<ArtistDto> Artists { get; init; }=[]; public List<ServiceDto> Services { get; init; }=[]; public List<SlotDto> Slots { get; init; }=[]; public BookingForm Form { get; init; }=new(); public string? Error { get; init; } }
 public sealed class TableOrderForm { public string Session { get; set; }=""; public List<TableOrderInput> Items { get; set; }=[]; }

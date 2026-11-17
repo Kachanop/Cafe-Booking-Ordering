@@ -4,7 +4,7 @@ using MyWebApp.Services;
 
 namespace MyWebApp.Controllers;
 
-public sealed class OperationsController(CafeDataService cafe) : Controller
+public sealed class OperationsController(CafeDataService cafe, IConfiguration configuration) : Controller
 {
     [HttpGet("admin")]
     public async Task<IActionResult> Admin()
@@ -48,7 +48,7 @@ public sealed class OperationsController(CafeDataService cafe) : Controller
         var result = await cafe.OpenTableAsync(id);
         if (result.Table is not null)
         {
-            var url = new Uri(new Uri(Request.Scheme + "://" + Request.Host), result.Table.Url.TrimStart('/')).ToString();
+            var url = CafeUrlBuilder.GetBaseUrl(Request, configuration) + result.Table.Url;
             TempData["OpenedTableUrl"] = url;
             TempData["OpenedTableNumber"] = result.Table.TableNumber;
             TempData["OpenedTableId"] = result.Table.Id;
@@ -81,12 +81,21 @@ public sealed class OperationsController(CafeDataService cafe) : Controller
         return View(await cafe.GetCashierAsync());
     }
 
-    [HttpPost("cashier/close"), ValidateAntiForgeryToken]
-    public async Task<IActionResult> CloseTable(int tableId, string method)
+    [HttpPost("cashier/pay"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> PayTable(int tableId, string method)
     {
         if (!Allowed("Cashier", "Manager", "Owner")) return Denied();
-        var result = await cafe.CloseTableAsync(tableId, method);
-        TempData[result.Ok ? "Success" : "Error"] = result.Ok ? "รับชำระและปิดโต๊ะแล้ว" : result.Error ?? "ปิดบิลไม่สำเร็จ";
+        var result = await cafe.PayTableAsync(tableId, method);
+        TempData[result.Ok ? "Success" : "Error"] = result.Ok ? "รับชำระแล้ว ปิดโต๊ะและรีเซ็ต QR เรียบร้อย" : result.Error ?? "รับชำระไม่สำเร็จ";
+        return RedirectToAction(nameof(Cashier));
+    }
+
+    [HttpPost("cashier/close"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> ClosePaidTable(int tableId)
+    {
+        if (!Allowed("Cashier", "Manager", "Owner")) return Denied();
+        var result = await cafe.ClosePaidTableAsync(tableId);
+        TempData[result.Ok ? "Success" : "Error"] = result.Ok ? "ปิดโต๊ะและรีเซ็ต QR แล้ว" : result.Error ?? "ปิดโต๊ะไม่สำเร็จ";
         return RedirectToAction(nameof(Cashier));
     }
 
@@ -120,7 +129,7 @@ public sealed class OperationsController(CafeDataService cafe) : Controller
     public async Task<IActionResult> It()
     {
         if (!Allowed("IT Staff", "Manager", "Owner")) return Denied();
-        return View(await cafe.GetItOverviewAsync());
+        return View("It", await cafe.GetItOverviewAsync());
     }
 
     private async Task<IActionResult> SaveMenu(MenuForm form, string success)

@@ -4,3 +4,4 @@
 **/.env
 **/.env.local
 MyWebApp/Data/cafe.db*
+MyWebApp/Data/local-accounts.json

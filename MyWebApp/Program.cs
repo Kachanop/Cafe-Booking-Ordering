@@ -26,8 +26,7 @@ builder.Services.AddScoped<CafeDataService>();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope()) await scope.ServiceProvider.GetRequiredService<CafeDataService>().InitializeAsync();
 
-if (!app.Environment.IsDevelopment()) { app.UseExceptionHandler("/Home/Error"); app.UseHsts(); }
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment()) { app.UseExceptionHandler("/Home/Error"); app.UseHsts(); app.UseHttpsRedirection(); }
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();

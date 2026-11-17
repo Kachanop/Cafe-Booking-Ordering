@@ -1,3 +1,3 @@
 @model string
 @{ViewData["Title"]="สถานะระบบ";}
-<section class="content"><p class="eyebrow">IT OPERATIONS</p><h1>สถานะระบบ</h1>@if(ViewBag.Error is string error){<p class="notice">@error</p>}<article class="card"><h2>สรุปข้อมูลระบบ</h2><pre class="json-output">@Model</pre><p>Backend และฐานข้อมูล SQLite อยู่บนเครื่อง/เซิร์ฟเวอร์ที่กำหนดไว้ใน Backend</p><p>ข้อมูลทางการเงินจำกัดสิทธิ์สำหรับ Manager และ Owner</p></article></section>
+<section class="content"><p class="eyebrow">IT OPERATIONS</p><h1>สถานะระบบ</h1>@if(ViewBag.Error is string error){<p class="notice">@error</p>}<article class="card"><h2>สรุปข้อมูลระบบ</h2><pre class="json-output">@Model</pre><p>แอป MVC และฐานข้อมูล SQLite ทำงานในเครื่องหรือเซิร์ฟเวอร์ที่คุณกำหนด</p><p>ข้อมูลทางการเงินจำกัดสิทธิ์สำหรับ Manager และ Owner</p></article></section>
