@@ -1,0 +1,4 @@
+@model MyWebApp.Models.RegisterForm
+@{ViewData["Title"]="สมัครสมาชิก";}
+<section class="content auth"><a class="back-link" href="/">← กลับหน้าหลัก</a><p class="eyebrow">JOIN OUR CAFE</p><h1>สมัครสมาชิก</h1><div asp-validation-summary="ModelOnly" class="notice"></div>
+<form asp-action="Signup" method="post" class="form-card"><label asp-for="FullName">ชื่อที่แสดง</label><input asp-for="FullName" autocomplete="name"/><span asp-validation-for="FullName" class="field-error"></span><label asp-for="Email">อีเมล</label><input asp-for="Email" type="email" autocomplete="email"/><span asp-validation-for="Email" class="field-error"></span><label asp-for="Password">รหัสผ่าน (อย่างน้อย 8 ตัวอักษร)</label><input asp-for="Password" type="password" autocomplete="new-password"/><span asp-validation-for="Password" class="field-error"></span><button class="button">สร้างบัญชี</button></form><p>มีบัญชีแล้ว? <a asp-action="Login">เข้าสู่ระบบ</a></p></section>

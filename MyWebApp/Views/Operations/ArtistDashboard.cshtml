@@ -1,0 +1,4 @@
+@model List<BookingDto>
+@{ViewData["Title"]="ตารางงานช่าง";}
+<section class="content"><p class="eyebrow">MY SCHEDULE</p><h1>ตารางงานช่าง</h1>@if(TempData["Success"] is string success){<p class="success">@success</p>}@if(TempData["Error"] is string error){<p class="notice">@error</p>}@if(ViewBag.Error is string apiError){<p class="notice">@apiError</p>}
+@if(Model.Count==0){<p class="card">ยังไม่มีคิวงาน</p>}<div class="cards">@foreach(var booking in Model){<article class="card"><span class="tag">@booking.Status</span><h3>@booking.CustomerName · @booking.ServiceName</h3><p>@booking.BookingDate.ToString("dd MMM yyyy") · @booking.TimeSlot</p>@if(!string.IsNullOrWhiteSpace(booking.Note)){<p>หมายเหตุ: @booking.Note</p>}@if(booking.Status=="Paid"){<form asp-action="CompleteBooking" asp-route-id="@booking.Id" method="post"><button class="button">ทำงานเสร็จแล้ว</button></form>}</article>}</div></section>

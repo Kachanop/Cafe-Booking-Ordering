@@ -1,0 +1,6 @@
+@model MyWebApp.Models.ProfileForm
+@{ViewData["Title"]="บัญชีของฉัน";}
+<section class="content auth"><p class="eyebrow">ACCOUNT SETTINGS</p><h1>บัญชีของฉัน</h1>
+@if(TempData["Success"] is string success){<p class="success">@success</p>}<div asp-validation-summary="ModelOnly" class="notice"></div>
+<form asp-action="Profile" method="post" class="form-card"><label asp-for="FullName">ชื่อที่แสดง</label><input asp-for="FullName" autocomplete="name"/><span asp-validation-for="FullName" class="field-error"></span><label asp-for="Email">อีเมล</label><input asp-for="Email" readonly/><label asp-for="Phone">เบอร์โทรศัพท์</label><input asp-for="Phone" autocomplete="tel"/><label asp-for="Role">สิทธิ์ในระบบ</label><input asp-for="Role" readonly/><button class="button">บันทึกข้อมูล</button></form>
+<div class="account-actions"><a href="/my-bookings">ประวัติการจอง</a><form asp-action="Logout" method="post"><button class="button danger">ออกจากระบบ</button></form></div></section>

@@ -1,5 +1,6 @@
 using CafeSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CafeSystem.Data;
 
@@ -22,7 +23,12 @@ public sealed class CafeDbContext(DbContextOptions<CafeDbContext> options) : DbC
     {
         b.Entity<Role>().ToTable("Role"); b.Entity<Role>().HasIndex(x => x.Name).IsUnique();
         b.Entity<CafeUser>().ToTable("User"); b.Entity<CafeUser>().HasIndex(x => x.Email).IsUnique(); b.Entity<CafeUser>().HasOne(x => x.Role).WithMany(x => x.Users).HasForeignKey(x => x.RoleId);
-        b.Entity<StaffProfile>().ToTable("StaffProfile").Property(x => x.Specialties).HasConversion(v => string.Join("|", v), v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+        var specialties = b.Entity<StaffProfile>().ToTable("StaffProfile").Property(x => x.Specialties);
+        specialties.HasConversion(v => string.Join("|", v), v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+        specialties.Metadata.SetValueComparer(new ValueComparer<string[]>(
+            (left, right) => left!.SequenceEqual(right!),
+            value => string.Join("|", value).GetHashCode(),
+            value => value.ToArray()));
         b.Entity<Service>().ToTable("Service");
         b.Entity<Booking>().ToTable("Booking").HasIndex(x => new { x.StaffId, x.BookingDate, x.TimeSlot }).IsUnique().HasFilter("Status <> 'Cancelled'");
         b.Entity<TableCafe>().ToTable("TableCafe"); b.Entity<MenuCategory>().ToTable("MenuCategory"); b.Entity<MenuItem>().ToTable("MenuItem");

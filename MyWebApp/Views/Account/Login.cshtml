@@ -1,0 +1,4 @@
+@model MyWebApp.Models.LoginForm
+@{ViewData["Title"]="เข้าสู่ระบบ";}
+<section class="content auth"><a class="back-link" href="/">← กลับหน้าหลัก</a><p class="eyebrow">WELCOME BACK</p><h1>เข้าสู่ระบบ</h1><div asp-validation-summary="ModelOnly" class="notice"></div>
+<form asp-action="Login" method="post" class="form-card"><input asp-for="ReturnUrl" type="hidden"/><label asp-for="Email">อีเมล</label><input asp-for="Email" type="email" autocomplete="email"/><span asp-validation-for="Email" class="field-error"></span><label asp-for="Password">รหัสผ่าน</label><input asp-for="Password" type="password" autocomplete="current-password"/><span asp-validation-for="Password" class="field-error"></span><button class="button">เข้าสู่ระบบ</button></form><p>ยังไม่มีบัญชี? <a asp-action="Signup">สมัครสมาชิก</a></p></section>

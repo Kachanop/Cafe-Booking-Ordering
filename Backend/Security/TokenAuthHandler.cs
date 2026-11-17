@@ -20,7 +20,7 @@ public sealed class TokenAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions
         await using var db = await dbFactory.CreateDbContextAsync();
         var session = await db.LoginSessions.Include(x => x.User).ThenInclude(x => x.Role).SingleOrDefaultAsync(x => x.TokenHash == hash && x.ExpiresAt > DateTime.UtcNow);
         if (session is null) return AuthenticateResult.Fail("Invalid or expired token");
-        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, session.User.Id.ToString()), new Claim(ClaimTypes.Name, session.User.FullName), new Claim(ClaimTypes.Role, session.User.Role.Name) };
+        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, session.User.Id.ToString()), new Claim(ClaimTypes.Name, session.User.FullName), new Claim(ClaimTypes.Role, session.User.Role.Name), new Claim("session_hash", session.TokenHash) };
         var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
         return AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name));
     }

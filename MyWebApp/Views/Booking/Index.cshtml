@@ -1,0 +1,15 @@
+@model BookingPageViewModel
+@{ViewData["Title"]="จองคิวสตูดิโอ";var loggedIn=Context.Session.GetString("Cafe.Token") is not null;}
+<section class="content"><a class="back-link" href="/">← กลับหน้าหลัก</a><p class="eyebrow">ONLINE STUDIO BOOKING</p><h1>จองคิวสตูดิโอ</h1><p>เลือกช่าง บริการ และรอบละ 2 ชั่วโมง ระบบจะแสดงคิวเต็มจากการจองจริง</p>
+<form method="get" action="/booking" class="filter-bar"><label>ช่าง<select name="staffId"><option value="0">เลือกช่าง</option>@foreach(var artist in Model.Artists){<option value="@artist.Id" selected="@(Model.Form.StaffId==artist.Id)">@artist.FullName</option>}</select></label><label>วันที่<input type="date" name="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" value="@Model.Form.BookingDate.ToString("yyyy-MM-dd")"/></label><button class="button">ดูคิวว่าง</button></form>
+@if(Model.Error is not null){<p class="notice">@Model.Error</p>}<div asp-validation-summary="ModelOnly" class="notice"></div>
+@if(Model.Form.StaffId>0){<form asp-action="Create" method="post" class="form-card booking-form">
+    <input type="hidden" name="StaffId" value="@Model.Form.StaffId"/><input type="hidden" name="BookingDate" value="@Model.Form.BookingDate.ToString("yyyy-MM-dd")"/>
+    <label>บริการ<select name="ServiceId"><option value="0">เลือกบริการ</option>@foreach(var service in Model.Services){<option value="@service.Id">@service.Name · @service.Price.ToString("N2") บาท</option>}</select></label>
+    <label>รอบเวลา<select name="TimeSlot"><option value="">เลือกรอบเวลา</option>@foreach(var slot in Model.Slots){<option value="@slot.TimeSlot" disabled="@(!slot.Available)">@slot.TimeSlot.Replace("-"," – ") · @(slot.Available?"ว่าง":"คิวเต็ม")</option>}</select></label>
+    <label>หมายเหตุ<input name="Note" value="@Model.Form.Note" placeholder="แจ้งรายละเอียดเพิ่มเติม" maxlength="500"/></label>
+    @if(!loggedIn){<p class="notice">เข้าสู่ระบบในฐานะสมาชิกก่อนยืนยันคิว <a href="/Account/Login?returnUrl=%2Fbooking">เข้าสู่ระบบ</a></p>}
+    <button class="button" disabled="@(!loggedIn || Model.Slots.All(x=>!x.Available))">ยืนยันจอง · ชำระเต็มจำนวน</button>
+</form>}
+<h2 class="section-spaced">ช่างในสตูดิโอ</h2><div class="cards">@foreach(var artist in Model.Artists){<article class="card"><span class="tag">Studio Artist</span><h3>@artist.FullName</h3><p>@artist.Bio</p>@if(artist.Specialties.Length>0){<p>ถนัด: @string.Join(" · ",artist.Specialties)</p>}@if(!string.IsNullOrWhiteSpace(artist.PortfolioUrl)){<a href="@artist.PortfolioUrl" target="_blank" rel="noreferrer">ดูผลงาน</a>}</article>}</div>
+</section>

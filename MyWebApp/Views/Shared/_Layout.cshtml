@@ -1,0 +1,30 @@
+@inject IHttpContextAccessor ContextAccessor
+@{ var cafeSession=ContextAccessor.HttpContext?.Session; var role=cafeSession?.GetString("Cafe.Role"); var name=cafeSession?.GetString("Cafe.Name"); }
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="~/favicon.png" />
+    <title>@ViewData["Title"] · Cafe & Studio</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" asp-controller="Home" asp-action="Index">CAFE <span>&</span> STUDIO</a>
+        <nav>
+            <a asp-controller="Booking" asp-action="Index">จองคิว</a><a href="/#menu">เมนู</a>
+            @if(role is "Waiter" or "Cashier" or "Manager" or "Owner"){<a href="/tables">โต๊ะ</a>}
+            @if(role is "Kitchen" or "Manager" or "Owner"){<a href="/kds">ครัว</a>}
+            @if(role is "Cashier" or "Manager" or "Owner"){<a href="/cashier">แคชเชียร์</a>}
+            @if(role is "Manager" or "Owner"){<a href="/admin">จัดการร้าน</a>}
+            @if(role=="Artist"){<a href="/artist-dashboard">ตารางช่าง</a>}
+            @if(string.IsNullOrEmpty(cafeSession?.GetString("Cafe.Token"))){<a class="account-link" asp-controller="Account" asp-action="Login">👤 เข้าสู่ระบบ</a>}
+            else{<a class="account-link" asp-controller="Account" asp-action="Profile">👤 @name</a>}
+        </nav>
+    </header>
+    <main>@RenderBody()</main>
+    <footer class="site-footer">Cafe & Studio · ระบบจองและสั่งอาหาร</footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,16 @@
+@model TablePageViewModel
+@{ViewData["Title"]=$"โต๊ะ {Model.SessionInfo.TableNumber}";}
+<section class="content table-order">
+    @if(Model.Error is not null){<p class="notice">@Model.Error</p>}
+    @if(TempData["Success"] is string success){<p class="success">@success</p>}@if(TempData["Error"] is string error){<p class="notice">@error</p>}
+    @if(Model.Error is null){<div class="table-banner"><span class="tag">CAFE · @Model.SessionInfo.TableNumber</span><h1>เมนูอาหารและเครื่องดื่ม</h1><p>เลือกจำนวนและแจ้งรายละเอียดให้ครัวทราบได้</p></div>
+        @if(Model.SessionInfo.BillRequested){<div class="notice"><strong>เรียกเก็บเงินแล้ว</strong><br/>พนักงานกำลังมาที่โต๊ะ กรุณารอสักครู่</div>}
+        @if(Model.SessionInfo.Orders.Count>0){<section><h2>รายการของโต๊ะนี้</h2><div class="cards">@foreach(var order in Model.SessionInfo.Orders){<article class="card"><span class="tag">รายการ #@order.Id · @order.Status</span>@foreach(var line in order.Items){<p>@line.Menu × @line.Quantity · @((line.Price*line.Quantity).ToString("N2")) บาท <small>(@line.KdsStatus)</small></p>}<strong>รวม @order.TotalAmount.ToString("N2") บาท</strong></article>}</div></section>}
+        @if(!Model.SessionInfo.BillRequested){<section class="menu-section"><h2>เลือกเมนู</h2>@foreach(var group in Model.SessionInfo.Menu.GroupBy(x=>x.Category)){<h3 class="category-title">@group.Key</h3><div class="cards">@for(var i=0;i<group.Count();i++){var item=group.ElementAt(i);var idx=Model.SessionInfo.Menu.IndexOf(item);<article class="card menu-card"><div><h3>@item.Name</h3><p>@item.Price.ToString("N2") บาท</p></div><label>จำนวน<input type="number" form="order-form" name="Items[@idx].Quantity" min="0" max="20" value="0"/></label><input type="hidden" form="order-form" name="Items[@idx].MenuItemId" value="@item.Id"/><label class="note-field">หมายเหตุ<input type="text" form="order-form" name="Items[@idx].Note" maxlength="180" placeholder="หวานน้อย"/></label></article>}</div>}
+            @if(Model.SessionInfo.Menu.Count==0){<p>ขณะนี้ยังไม่มีเมนูพร้อมจำหน่าย</p>}
+            <form id="order-form" asp-action="Order" asp-route-id="@Model.SessionInfo.Id" method="post"><input type="hidden" name="Session" value="@Model.Token"/><button class="button order-submit" disabled="@(Model.SessionInfo.Menu.Count==0)">ยืนยันสั่งอาหาร</button></form>
+        </section>}
+        @if(Model.SessionInfo.Orders.Any(o=>o.Status=="Dining")&&!Model.SessionInfo.BillRequested){<form asp-action="Bill" asp-route-id="@Model.SessionInfo.Id" method="post"><input type="hidden" name="session" value="@Model.Token"/><button class="button bill-button">เรียกพนักงานเก็บเงิน</button></form>}
+    }
+</section>
+@if(Model.Error is null){<script>window.setTimeout(()=>window.location.reload(),15000);</script>}

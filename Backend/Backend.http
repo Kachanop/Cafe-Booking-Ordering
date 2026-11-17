@@ -1,6 +1,19 @@
-@Backend_HostAddress = http://localhost:5278
+@Backend_HostAddress = http://localhost:5080
 
-GET {{Backend_HostAddress}}/weatherforecast/
+GET {{Backend_HostAddress}}/health
 Accept: application/json
 
 ###
+
+GET {{Backend_HostAddress}}/api/menu
+Accept: application/json
+
+###
+
+GET {{Backend_HostAddress}}/api/services
+Accept: application/json
+
+###
+
+GET {{Backend_HostAddress}}/api/artists
+Accept: application/json

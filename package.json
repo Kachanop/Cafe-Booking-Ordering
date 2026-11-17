@@ -1,0 +1,9 @@
+{
+  "name": "cafe-booking-ordering-api-checks",
+  "private": true,
+  "scripts": {
+    "test:api": "mocha --timeout 30000 test/api-smoke.spec.mjs",
+    "test:api:workflow": "mocha --timeout 30000 test/api-workflows.spec.mjs"
+  },
+  "devDependencies": { "mocha": "^12.0.3" }
+}

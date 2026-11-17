@@ -1,0 +1,7 @@
+@model List<TableDto>
+@{ViewData["Title"]="จัดการโต๊ะ";}
+<section class="content"><p class="eyebrow">TABLE SESSIONS</p><h1>โต๊ะและ QR สั่งอาหาร</h1><p>เปิดโต๊ะเพื่อสร้างรหัส QR สำหรับการนั่งรอบนี้ รหัสจะใช้ไม่ได้หลังปิดบิล</p>
+@if(TempData["Error"] is string error){<p class="notice">@error</p>}@if(ViewBag.Error is string apiError){<p class="notice">@apiError</p>}
+@if(TempData["OpenedTableUrl"] is string url){<section class="card qr-link"><h2>โต๊ะ @TempData["OpenedTableNumber"] เปิดแล้ว</h2><p>พิมพ์ QR หรือให้ลูกค้าสแกนด้วยมือถือ</p><img class="qr-image" src="@($"/table/{TempData["OpenedTableId"]}/qr?session={Uri.EscapeDataString((string)TempData["OpenedTableSession"]!)}")" alt="QR code สั่งอาหาร"/><p><a href="@url" target="_blank" rel="noreferrer">@url</a></p><button class="button" type="button" onclick="window.print()">พิมพ์ QR</button></section>}
+<div class="cards">@foreach(var table in Model){<article class="card"><span class="tag">@table.TableNumber</span><h2>@(table.IsOpen?"กำลังใช้งาน":"ว่าง")</h2>@if(table.IsOpen){<p>@(table.BillRequestedAt is null?"ลูกค้ากำลังใช้บริการ":"รอแคชเชียร์")</p>}else{<form asp-action="OpenTable" asp-route-id="@table.Id" method="post"><button class="button">เปิดโต๊ะและสร้าง QR</button></form>}</article>}</div>
+</section>

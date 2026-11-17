@@ -1,0 +1,7 @@
+@model List<BookingDto>
+@{ViewData["Title"]="ประวัติการจอง";}
+<section class="content"><p class="eyebrow">YOUR STUDIO VISITS</p><h1>ประวัติการจอง</h1>
+@if(TempData["Success"] is string success){<p class="success">@success</p>}@if(TempData["Error"] is string err){<p class="notice">@err</p>}@if(ViewBag.Error is string error){<p class="notice">@error</p>}
+@if(Model.Count==0){<article class="card"><p>ยังไม่มีรายการจอง</p><a href="/booking" class="button">เลือกคิวช่าง</a></article>}
+<div class="cards">@foreach(var booking in Model){<article class="card"><span class="tag">@booking.Status</span><h3>@booking.ServiceName · @booking.StaffName</h3><p>@booking.BookingDate.ToString("dd MMM yyyy") · @booking.TimeSlot</p><p>ผู้จอง @booking.CustomerName</p><strong>@booking.TotalPrice.ToString("N2") บาท</strong>@if(!string.IsNullOrWhiteSpace(booking.Note)){<p>หมายเหตุ: @booking.Note</p>}@if(booking.Status=="Pending"){<p>รอชำระเต็มจำนวนที่แคชเชียร์</p><form asp-action="Cancel" method="post"><input type="hidden" name="id" value="@booking.Id"/><button class="button secondary">ยกเลิกการจอง</button></form>}</article>}</div>
+</section>
