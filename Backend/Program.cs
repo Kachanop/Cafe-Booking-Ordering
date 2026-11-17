@@ -124,8 +124,9 @@ secure.MapPut("/profile", async (ProfileRequest request, ClaimsPrincipal actor, 
 });
 secure.MapGet("/bookings", async (ClaimsPrincipal actor, IDbContextFactory<CafeDbContext> factory) => {
     await using var db = await factory.CreateDbContextAsync(); var userId = int.Parse(actor.FindFirstValue(ClaimTypes.NameIdentifier)!); var role = actor.FindFirstValue(ClaimTypes.Role)!;
+    if (role is not ("Member" or "Artist" or "Waiter" or "Cashier" or "Manager" or "Owner")) return Results.Forbid();
     var query = db.Bookings.AsQueryable(); if (role == "Member") query = query.Where(x => x.CustomerId == userId); else if (role == "Artist") query = query.Where(x => x.StaffId == userId);
-    return await (from b in query join customer in db.Users on b.CustomerId equals customer.Id join staff in db.Users on b.StaffId equals staff.Id join service in db.Services on b.ServiceId equals service.Id orderby b.BookingDate, b.TimeSlot select new BookingDto(b.Id, b.CustomerId, customer.FullName, b.StaffId, staff.FullName, b.ServiceId, service.Name, b.BookingDate, b.TimeSlot, b.Status, b.TotalPrice, b.CustomerNote)).ToListAsync();
+    return Results.Ok(await (from b in query join customer in db.Users on b.CustomerId equals customer.Id join staff in db.Users on b.StaffId equals staff.Id join service in db.Services on b.ServiceId equals service.Id orderby b.BookingDate, b.TimeSlot select new BookingDto(b.Id, b.CustomerId, customer.FullName, b.StaffId, staff.FullName, b.ServiceId, service.Name, b.BookingDate, b.TimeSlot, b.Status, b.TotalPrice, b.CustomerNote)).ToListAsync());
 });
 secure.MapPost("/bookings", async (CreateBookingRequest request, ClaimsPrincipal actor, IDbContextFactory<CafeDbContext> factory) => {
     var role = actor.FindFirstValue(ClaimTypes.Role)!; if (role is not ("Member" or "Artist" or "Waiter" or "Manager" or "Owner")) return Results.Forbid();
@@ -140,7 +141,9 @@ secure.MapPost("/bookings", async (CreateBookingRequest request, ClaimsPrincipal
 });
 secure.MapPost("/bookings/{id:int}/cancel", async (int id, ClaimsPrincipal actor, IDbContextFactory<CafeDbContext> factory) => {
     await using var db = await factory.CreateDbContextAsync(); var userId = int.Parse(actor.FindFirstValue(ClaimTypes.NameIdentifier)!); var role = actor.FindFirstValue(ClaimTypes.Role);
-    var query = db.Bookings.Where(x => x.Id == id && x.Status == "Pending"); if (role == "Member") query = query.Where(x => x.CustomerId == userId);
+    if (role is not ("Member" or "Artist" or "Waiter" or "Manager" or "Owner")) return Results.Forbid();
+    var query = db.Bookings.Where(x => x.Id == id && x.Status == "Pending");
+    if (role == "Member") query = query.Where(x => x.CustomerId == userId); else if (role == "Artist") query = query.Where(x => x.StaffId == userId);
     var booking = await query.SingleOrDefaultAsync(); if (booking is null) return Results.NotFound(); booking.Status = "Cancelled"; await db.SaveChangesAsync(); return Results.NoContent();
 });
 secure.MapGet("/tables", async (IDbContextFactory<CafeDbContext> factory) => { await using var db = await factory.CreateDbContextAsync(); return await db.Tables.OrderBy(x => x.Id).Select(x => new TableDto(x.Id, x.TableNumber, x.CurrentSession != null, x.BillRequestedAt)).ToListAsync(); });
