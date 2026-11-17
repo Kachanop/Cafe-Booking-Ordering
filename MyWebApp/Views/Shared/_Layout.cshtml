@@ -19,7 +19,7 @@
             @if(role is "Cashier" or "Manager" or "Owner"){<a href="/cashier">แคชเชียร์</a>}
             @if(role is "Manager" or "Owner"){<a href="/admin">จัดการร้าน</a>}
             @if(role=="Artist"){<a href="/artist-dashboard">ตารางช่าง</a>}
-            @if(string.IsNullOrEmpty(cafeSession?.GetString("Cafe.Token"))){<a class="account-link" asp-controller="Account" asp-action="Login">👤 เข้าสู่ระบบ</a>}
+            @if(cafeSession?.GetInt32("Cafe.UserId") is null){<a class="account-link" asp-controller="Account" asp-action="Login">👤 เข้าสู่ระบบ</a>}
             else{<a class="account-link" asp-controller="Account" asp-action="Profile">👤 @name</a>}
         </nav>
     </header>

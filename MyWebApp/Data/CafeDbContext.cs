@@ -1,8 +1,7 @@
-using CafeSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace CafeSystem.Data;
+namespace MyWebApp.Data;
 
 public sealed class CafeDbContext(DbContextOptions<CafeDbContext> options) : DbContext(options)
 {
@@ -17,12 +16,12 @@ public sealed class CafeDbContext(DbContextOptions<CafeDbContext> options) : DbC
     public DbSet<CafeOrder> Orders => Set<CafeOrder>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Payment> Payments => Set<Payment>();
-    public DbSet<LoginSession> LoginSessions => Set<LoginSession>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
-        b.Entity<Role>().ToTable("Role"); b.Entity<Role>().HasIndex(x => x.Name).IsUnique();
-        b.Entity<CafeUser>().ToTable("User"); b.Entity<CafeUser>().HasIndex(x => x.Email).IsUnique(); b.Entity<CafeUser>().HasOne(x => x.Role).WithMany(x => x.Users).HasForeignKey(x => x.RoleId);
+        b.Entity<Role>().ToTable("Role").HasIndex(x => x.Name).IsUnique();
+        b.Entity<CafeUser>().ToTable("User").HasIndex(x => x.Email).IsUnique();
+        b.Entity<CafeUser>().HasOne(x => x.Role).WithMany(x => x.Users).HasForeignKey(x => x.RoleId);
         var specialties = b.Entity<StaffProfile>().ToTable("StaffProfile").Property(x => x.Specialties);
         specialties.HasConversion(v => string.Join("|", v), v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
         specialties.Metadata.SetValueComparer(new ValueComparer<string[]>(
@@ -31,8 +30,11 @@ public sealed class CafeDbContext(DbContextOptions<CafeDbContext> options) : DbC
             value => value.ToArray()));
         b.Entity<Service>().ToTable("Service");
         b.Entity<Booking>().ToTable("Booking").HasIndex(x => new { x.StaffId, x.BookingDate, x.TimeSlot }).IsUnique().HasFilter("Status <> 'Cancelled'");
-        b.Entity<TableCafe>().ToTable("TableCafe"); b.Entity<MenuCategory>().ToTable("MenuCategory"); b.Entity<MenuItem>().ToTable("MenuItem");
-        b.Entity<CafeOrder>().ToTable("Order"); b.Entity<OrderItem>().ToTable("OrderItem"); b.Entity<Payment>().ToTable("Payment");
-        b.Entity<LoginSession>().ToTable("LoginSession").HasKey(x => x.TokenHash); b.Entity<LoginSession>().HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        b.Entity<TableCafe>().ToTable("TableCafe");
+        b.Entity<MenuCategory>().ToTable("MenuCategory");
+        b.Entity<MenuItem>().ToTable("MenuItem");
+        b.Entity<CafeOrder>().ToTable("Order");
+        b.Entity<OrderItem>().ToTable("OrderItem");
+        b.Entity<Payment>().ToTable("Payment");
     }
 }

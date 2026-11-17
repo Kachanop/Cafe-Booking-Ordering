@@ -3,6 +3,4 @@
 **/node_modules/
 **/.env
 **/.env.local
-Backend/Data/cafe.db
-Backend/Data/cafe.db-shm
-Backend/Data/cafe.db-wal
+MyWebApp/Data/cafe.db*

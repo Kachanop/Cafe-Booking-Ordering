@@ -1,9 +1,0 @@
-{
-  "name": "Cafe & Studio - Local C#",
-  "values": [
-    { "key": "backendUrl", "value": "http://localhost:5080", "type": "default", "enabled": true },
-    { "key": "webUrl", "value": "http://localhost:5002", "type": "default", "enabled": true }
-  ],
-  "_postman_variable_scope": "environment",
-  "_postman_exported_using": "Postman/11"
-}

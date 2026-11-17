@@ -1,5 +1,5 @@
 @model BookingPageViewModel
-@{ViewData["Title"]="จองคิวสตูดิโอ";var loggedIn=Context.Session.GetString("Cafe.Token") is not null;}
+@{ViewData["Title"]="จองคิวสตูดิโอ";var loggedIn=Context.Session.GetInt32("Cafe.UserId") is not null;}
 <section class="content"><a class="back-link" href="/">← กลับหน้าหลัก</a><p class="eyebrow">ONLINE STUDIO BOOKING</p><h1>จองคิวสตูดิโอ</h1><p>เลือกช่าง บริการ และรอบละ 2 ชั่วโมง ระบบจะแสดงคิวเต็มจากการจองจริง</p>
 <form method="get" action="/booking" class="filter-bar"><label>ช่าง<select name="staffId"><option value="0">เลือกช่าง</option>@foreach(var artist in Model.Artists){<option value="@artist.Id" selected="@(Model.Form.StaffId==artist.Id)">@artist.FullName</option>}</select></label><label>วันที่<input type="date" name="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" value="@Model.Form.BookingDate.ToString("yyyy-MM-dd")"/></label><button class="button">ดูคิวว่าง</button></form>
 @if(Model.Error is not null){<p class="notice">@Model.Error</p>}<div asp-validation-summary="ModelOnly" class="notice"></div>

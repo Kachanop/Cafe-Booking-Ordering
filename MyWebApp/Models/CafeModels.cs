@@ -6,8 +6,6 @@ public sealed record MenuItemDto(int Id, string Category, string Name, decimal P
 public sealed record ServiceDto(int Id, string Name, decimal Price);
 public sealed record ArtistDto(int Id, string FullName, string? Bio, string? PortfolioUrl, string[] Specialties);
 public sealed record SlotDto(string TimeSlot, bool Available);
-public sealed record AuthResult(string AccessToken, int ExpiresInDays, AuthUser User);
-public sealed record AuthUser(int Id, string FullName, string? Email, string? Role);
 public sealed record ProfileDto(int Id, string FullName, string? Email, string? Phone, string Role);
 public sealed record BookingDto(int Id, int CustomerId, string CustomerName, int StaffId, string StaffName, int ServiceId, string ServiceName, DateTime BookingDate, string TimeSlot, string Status, decimal TotalPrice, string? Note);
 public sealed record KitchenItemDto(int Id, int OrderId, string Table, string Menu, int Quantity, string KdsStatus, string? Note, DateTime CreatedAt);
@@ -17,7 +15,6 @@ public sealed record OverviewDto(int Users, int BookingsToday, int OpenTables, i
 public sealed record StaffDto(int Id, string FullName, string? Email, string? Phone, string Role);
 public sealed record TableDto(int Id, string TableNumber, bool IsOpen, DateTime? BillRequestedAt);
 public sealed record OpenedTableDto(int Id, string TableNumber, string Session, string Url);
-public sealed record OrderInput(int MenuItemId, int Quantity, string? Note);
 public sealed record TableSessionDto(int Id, string TableNumber, bool BillRequested, List<MenuItemDto> Menu, List<TableOrderDto> Orders);
 public sealed record TableOrderDto(int Id, string Status, decimal TotalAmount, List<TableOrderLineDto> Items);
 public sealed record TableOrderLineDto(int Id, string Menu, int Quantity, decimal Price, string? Note, string KdsStatus);

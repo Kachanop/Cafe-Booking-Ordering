@@ -1,4 +1,5 @@
-namespace CafeSystem.Models;
+namespace MyWebApp.Data;
+
 public sealed class Role { public int Id { get; set; } public string Name { get; set; } = ""; public string? Description { get; set; } public List<CafeUser> Users { get; set; } = []; }
 public sealed class CafeUser { public int Id { get; set; } public int RoleId { get; set; } public Role Role { get; set; } = null!; public string? Phone { get; set; } public string? Email { get; set; } public string? PasswordHash { get; set; } public string FullName { get; set; } = ""; public DateTime CreatedAt { get; set; } }
 public sealed class StaffProfile { public int Id { get; set; } public int UserId { get; set; } public string? Bio { get; set; } public string? PortfolioUrl { get; set; } public string? AvatarUrl { get; set; } public string[] Specialties { get; set; } = []; }
@@ -10,4 +11,3 @@ public sealed class MenuItem { public int Id { get; set; } public int CategoryId
 public sealed class CafeOrder { public int Id { get; set; } public int TableId { get; set; } public string Status { get; set; } = "Dining"; public decimal TotalAmount { get; set; } public DateTime CreatedAt { get; set; } }
 public sealed class OrderItem { public int Id { get; set; } public int OrderId { get; set; } public int MenuItemId { get; set; } public int Quantity { get; set; } = 1; public decimal UnitPrice { get; set; } public string KdsStatus { get; set; } = "Pending"; public string? Note { get; set; } }
 public sealed class Payment { public int Id { get; set; } public int ReferenceId { get; set; } public string ReferenceType { get; set; } = ""; public decimal Amount { get; set; } public string Status { get; set; } = "Success"; public string Method { get; set; } = "UNKNOWN"; public DateTime PaidAt { get; set; } }
-public sealed class LoginSession { public string TokenHash { get; set; } = ""; public int UserId { get; set; } public CafeUser User { get; set; } = null!; public DateTime ExpiresAt { get; set; } }
