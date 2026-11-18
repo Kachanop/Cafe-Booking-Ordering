@@ -19,7 +19,11 @@ builder.Services.AddSession(options =>
 var databasePath = builder.Configuration["Database:Path"] ?? Path.Combine(builder.Environment.ContentRootPath, "Data", "cafe.db");
 if (!Path.IsPathRooted(databasePath)) databasePath = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, databasePath));
 Directory.CreateDirectory(Path.GetDirectoryName(databasePath)!);
-builder.Services.AddDbContextFactory<CafeDbContext>(options => options.UseSqlite($"Data Source={databasePath};Foreign Keys=True;Default Timeout=15"));
+
+// WAL allows screens to read while another request is writing. A longer SQLite
+// busy timeout lets concurrent cashier/booking requests wait for the active writer.
+var connectionString = $"Data Source={databasePath};Foreign Keys=True;Default Timeout=30;Pooling=True";
+builder.Services.AddDbContextFactory<CafeDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<IPasswordHasher<CafeUser>, PasswordHasher<CafeUser>>();
 builder.Services.AddScoped<CafeDataService>();
 
@@ -38,7 +42,10 @@ app.Use(async (context, next) =>
         await using var scope = app.Services.CreateAsyncScope();
         var role = await scope.ServiceProvider.GetRequiredService<CafeDataService>().GetRoleAsync(id);
         if (role is null) context.Session.Clear();
-        else context.Session.SetString("Cafe.Role", role);
+        // Avoid marking the whole session as modified on every request. Multiple
+        // tabs commonly load pages at once; unnecessary session commits can race.
+        else if (!string.Equals(context.Session.GetString("Cafe.Role"), role, StringComparison.Ordinal))
+            context.Session.SetString("Cafe.Role", role);
     }
     await next();
 });

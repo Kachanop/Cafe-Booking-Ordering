@@ -19,6 +19,9 @@ public sealed class CafeDataService(
     {
         await using var db = await factory.CreateDbContextAsync();
         await db.Database.EnsureCreatedAsync();
+        // WAL lets concurrent screens read while a write is in progress. SQLite
+        // keeps this journal mode in the database file after initialization.
+        await db.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;");
         await EnsureColumnAsync(db, "Booking", "CustomerNote", "ALTER TABLE \"Booking\" ADD COLUMN \"CustomerNote\" TEXT NULL");
         await EnsureColumnAsync(db, "TableCafe", "OpenedAt", "ALTER TABLE \"TableCafe\" ADD COLUMN \"OpenedAt\" TEXT NULL");
         await EnsureColumnAsync(db, "TableCafe", "BillRequestedAt", "ALTER TABLE \"TableCafe\" ADD COLUMN \"BillRequestedAt\" TEXT NULL");
